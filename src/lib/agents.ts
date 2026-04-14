@@ -19,17 +19,18 @@ RULES:
 OUTPUT FORMAT (return JSON only, no markdown):
 {"post": "your generated post here", "pattern": "tech-bro", "absurdity_level": 7}`;
 
-const SYSTEM_ABSURDIST = `You are a satirical LinkedIn writer who has fully dissociated. You write posts that start on one topic and spiral into complete non-sequitur chaos.
+const SYSTEM_ABSURDIST = `You are a satirical LinkedIn writer with a unique approach. You take a mundane work topic and spiral into bizarre tangents, but there's an internal logic to your madness — you just apply completely wrong frameworks.
 
-TONE: Stream of consciousness gone wrong. Random specificity. Escalating absurdity. The humor comes from the post having zero logical coherence — the reader keeps waiting for the point and it never comes.
+TONE: Pseudo-intellectual rambling. Confident absurdity. Like someone who read one book and now thinks they're an expert. The humor comes from applying the wrong lesson to the wrong situation with total confidence.
 
 RULES:
-- Start with the user's topic but derail COMPLETELY by paragraph 2
-- Include specific fake details: exact times ("4:47am on a Tuesday"), fake statistics, made-up references
-- The ending should be completely disconnected from the beginning
-- End on a sentence that looks like it wants to land a punchline but misses
+- Start with user's topic and establish a "profound" sounding theme
+- Derail into applying a bizarre framework: pop psychology, fake productivity studies, conspiracy-tier "research," weird analogies
+- Include fake统计数据: "a study showed," "93% of engineers," "4.7x more likely," specific made-up numbers
+- Keep a thread of internal logic — you're not random, you're just WRONG
+- End with a pseudo-profound conclusion that doesn't actually connect
 - 100-200 words
-- NO indication this is intentional humor. play it completely straight.
+- Play it completely straight. No winking at the audience.
 
 OUTPUT FORMAT (return JSON only, no markdown):
 {"post": "your generated post here", "pattern": "absurdist", "derailment_score": 8}`;
@@ -86,10 +87,10 @@ RULES:
 - The humblebrag is hidden inside casual phrasing
 - Ends with a question to drive comments — asks the reader something
 - 100-160 words
-- Punctuation is... optional? Use periods sparingly.
+- Use periods sparingly, but include 1-2 for readability. Use commas, question marks. Don't go crazy, but punctuation should be present.
 
 EXAMPLE ENERGY:
-"hey so i've been thinking about this a lot lately... [proceeds to humblebrag about something mundane in the most casual way possible] anyway lmk your thoughts below 👇"
+"hey so i've been thinking about this a lot lately... [proceeds to humblebrag about something mundane in the most casual way possible] anyway. lmk your thoughts below 👇"
 
 OUTPUT FORMAT (return JSON only, no markdown):
 {"post": "your generated post here", "pattern": "lowercase", "tryhard_level": 8}`;
@@ -106,14 +107,7 @@ export interface GeneratedPost {
 
 // ─── GENERATION ─────────────────────────────────────────────────────────────
 
-export async function generateAllPosts(
-  userPrompt: string,
-  imageTranscription?: string
-): Promise<GeneratedPost[]> {
-  const fullPrompt = imageTranscription
-    ? `${userPrompt}\n\n[IMAGE CONTENT: ${imageTranscription}]`
-    : userPrompt;
-
+export async function generateAllPosts(userPrompt: string): Promise<GeneratedPost[]> {
   const agents = [
     { name: "tech-bro", system: SYSTEM_TECH_BRO },
     { name: "absurdist", system: SYSTEM_ABSURDIST },
@@ -127,10 +121,12 @@ export async function generateAllPosts(
       const { text } = await generateText({
         model: getModel(MODELS.generate),
         system: agent.system,
-        prompt: `Topic or context: ${fullPrompt}`,
-        temperature: 1.2,
-        maxOutputTokens: 600,
+        prompt: `Topic: ${userPrompt}`,
+        temperature: 0.9,
+        maxOutputTokens: 500,
       });
+
+      console.log("[agents] Raw response from", agent.name, ":", text?.slice(0, 200));
 
       try {
         const parsed = JSON.parse(text);
@@ -143,6 +139,7 @@ export async function generateAllPosts(
           key_metric_name: scoreKey,
         } as GeneratedPost;
       } catch {
+        console.log("[agents] JSON parse failed for", agent.name, ", using raw text");
         return {
           post: text,
           pattern: agent.name,
@@ -153,5 +150,6 @@ export async function generateAllPosts(
     })
   );
 
+  console.log("[agents] Returning", results.length, "posts");
   return results;
 }

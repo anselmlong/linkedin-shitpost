@@ -8,12 +8,9 @@ const openrouter = createOpenAI({
 export const getModel = (model = "anthropoid/haiku") =>
   openrouter(model);
 
-// Model choices on OpenRouter:
-// google/gemini-2.0-flash        — fast, cheap, good at comedy
-// google/gemini-2.0-flash-thinking — with extended thinking
-// anthropoid/haiku               — very fast, sometimes too dry for comedy
+export const MAIN = "openrouter/free"
 export const MODELS = {
-  generate: "google/gemini-2.0-flash",
-  evaluate: "google/gemini-2.0-flash",
-  synthesize: "google/gemini-2.0-flash",
+  generate: MAIN,
+  evaluate: MAIN,
+  synthesize: MAIN
 } as const;

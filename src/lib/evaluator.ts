@@ -2,9 +2,9 @@ import { generateText } from "ai";
 import { getModel, MODELS } from "./openrouter";
 import type { GeneratedPost } from "./agents";
 
-const SYSTEM_EVALUATE = `You are evaluating generated LinkedIn shitposts for humor and viral potential.
+const SYSTEM_EVALUATE_BATCH = `You are evaluating 5 LinkedIn shitposts for humor and viral potential.
 
-Score each post on (1-10, integers only):
+For EACH post, score on (1-10, integers only):
 - humor: How funny is this? Does it land?
 - virality: Would a LinkedIn user share this? Would it get engagement?
 - originality: Is this fresh or derivative?
@@ -12,8 +12,8 @@ Score each post on (1-10, integers only):
 
 Total score = humor×0.4 + virality×0.3 + originality×0.2 + cringe×0.1
 
-Respond with ONLY valid JSON:
-{"scores": {"humor": N, "virality": N, "originality": N, "cringe_authenticity": N}, "total": N, "reasoning": "brief one-liner"}`;
+Respond with ONLY valid JSON with an "evaluations" array:
+{"evaluations": [{"pattern": "tech-bro", "humor": N, "virality": N, "originality": N, "cringe_authenticity": N, "total": N}, ...]}`;
 
 const SYSTEM_SYNTHESIZE = `You are an editor who just received 5 drafts of a LinkedIn shitpost from different comedy writers. Your job is to create two final outputs.
 
@@ -40,31 +40,26 @@ Respond with ONLY this JSON (no markdown, no explanation):
   "roast_mode": "full post text here"
 }`;
 
-export async function evaluatePost(post: GeneratedPost): Promise<{ total: number; reasoning: string }> {
+export async function evaluateAllPosts(posts: GeneratedPost[]): Promise<GeneratedPost[]> {
+  const postsText = posts.map((p, i) => `[${i}] ${p.pattern}: ${p.post}`).join("\n\n");
   const { text } = await generateText({
     model: getModel(MODELS.evaluate),
-    system: SYSTEM_EVALUATE,
-    prompt: `Evaluate this LinkedIn post:\n\n${post.post}`,
+    system: SYSTEM_EVALUATE_BATCH,
+    prompt: `Evaluate ALL of these LinkedIn posts at once:\n\n${postsText}`,
     temperature: 0.3,
-    maxOutputTokens: 200,
+    maxOutputTokens: 500,
   });
 
   try {
     const parsed = JSON.parse(text);
-    return { total: parsed.total, reasoning: parsed.reasoning };
+    const evals = parsed.evaluations || [];
+    return posts.map((post, i) => ({
+      ...post,
+      score: evals[i]?.total ?? 5,
+    }));
   } catch {
-    return { total: 5, reasoning: "eval failed, defaulting" };
+    return posts.map((post) => ({ ...post, score: 5 }));
   }
-}
-
-export async function evaluateAllPosts(posts: GeneratedPost[]): Promise<GeneratedPost[]> {
-  const results = await Promise.all(
-    posts.map(async (post) => {
-      const { total } = await evaluatePost(post);
-      return { ...post, score: total };
-    })
-  );
-  return results;
 }
 
 export async function synthesizePosts(posts: GeneratedPost[]): Promise<{

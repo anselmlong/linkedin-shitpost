@@ -34,7 +34,7 @@ export default function OutputCard({
   const handleCopy = async () => {
     await navigator.clipboard.writeText(post);
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    setTimeout(() => setCopied(false), 1500);
   };
 
   return (

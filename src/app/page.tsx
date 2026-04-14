@@ -1,9 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import InputPanel from "@/components/InputPanel";
 import OutputCard from "@/components/OutputCard";
 import type { GeneratedPost } from "@/lib/agents";
+
+const LOADING_MESSAGES = [
+  "5 agents brainstorming your humiliation...",
+  "Teaching AI to roast people...",
+  "Generating chaos...",
+  "Consulting the dark comedy council...",
+  "Distilling pure cringe...",
+  "Brewing the perfect shitpost...",
+];
 
 interface Synthesis {
   directors_cut: string;
@@ -16,13 +25,17 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [usedPrompt, setUsedPrompt] = useState<string | null>(null);
-  const [imageTranscription, setImageTranscription] = useState<string | null>(null);
+  const [loadingMessage, setLoadingMessage] = useState(LOADING_MESSAGES[0]);
 
-  const handleGenerate = async (
-    prompt: string,
-    imageBase64: string | null,
-    mimeType: string | null
-  ) => {
+  useEffect(() => {
+    if (!isLoading) return;
+    const interval = setInterval(() => {
+      setLoadingMessage(LOADING_MESSAGES[Math.floor(Math.random() * LOADING_MESSAGES.length)]);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, [isLoading]);
+
+  const handleGenerate = async (prompt: string) => {
     setIsLoading(true);
     setError(null);
     setUsedPrompt(prompt);
@@ -30,19 +43,17 @@ export default function Home() {
     try {
       const fd = new FormData();
       fd.append("prompt", prompt);
-      if (imageBase64) {
-        fd.append("imageBase64", imageBase64);
-        if (mimeType) fd.append("mimeType", mimeType);
-      }
 
       const res = await fetch("/api/generate", { method: "POST", body: fd });
       const data = await res.json();
+
+      console.log("[page] Response status:", res.status);
+      console.log("[page] Response data:", data);
 
       if (!res.ok) throw new Error(data.error || "Generation failed");
 
       setPosts(data.posts);
       setSynthesis(data.synthesis);
-      setImageTranscription(data.imageTranscription || null);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
@@ -67,43 +78,33 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-6 py-10 space-y-10">
-        {/* Input */}
+      <main className="max-w-4xl mx-auto px-6 py-10 space-y-12">
         <section>
           <InputPanel onGenerate={handleGenerate} isLoading={isLoading} />
         </section>
 
-        {/* Error */}
         {error && (
           <div className="bg-red-900/30 border border-red-800 rounded-lg p-4 text-red-300 text-sm">
             <strong>Error:</strong> {error}
           </div>
         )}
 
-        {/* Image transcription */}
-        {imageTranscription && (
-          <div className="bg-blue-900/20 border border-blue-800 rounded-lg p-3 text-blue-300 text-xs">
-            <strong>📸 Image transcription:</strong> {imageTranscription}
-          </div>
-        )}
-
-        {/* Loading skeleton */}
         {isLoading && (
-          <section>
-            <p className="text-center text-gray-500 mb-4 text-sm">
-              5 agents writing... evaluating... synthesizing...
+          <section className="space-y-6">
+            <p className="text-center text-gray-500 text-sm animate-pulse">
+              {loadingMessage}
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {Array.from({ length: 6 }).map((_, i) => (
                 <div
                   key={i}
-                  className="bg-gray-800 border border-gray-700 rounded-xl overflow-hidden animate-pulse"
+                  className="bg-gray-800/50 border border-gray-700/50 rounded-xl overflow-hidden animate-pulse"
                 >
-                  <div className="h-10 bg-gray-700" />
-                  <div className="p-4 space-y-2">
-                    <div className="h-4 bg-gray-700 rounded w-3/4" />
-                    <div className="h-4 bg-gray-700 rounded" />
-                    <div className="h-4 bg-gray-700 rounded w-1/2" />
+                  <div className="h-12 bg-gray-700/60 rounded-t-xl" />
+                  <div className="p-4 space-y-3">
+                    <div className="h-4 bg-gray-700/60 rounded w-3/4" />
+                    <div className="h-4 bg-gray-700/40 rounded" />
+                    <div className="h-4 bg-gray-700/40 rounded w-1/2" />
                   </div>
                 </div>
               ))}
@@ -111,25 +112,23 @@ export default function Home() {
           </section>
         )}
 
-        {/* Results */}
         {!isLoading && posts.length > 0 && (
-          <>
-            {/* Prompt echo */}
+          <div className="space-y-10">
             {usedPrompt && (
-              <div className="text-center">
-                <p className="text-gray-500 text-xs">
+              <div className="text-center pb-2">
+                <p className="text-gray-500 text-xs italic">
                   &ldquo;{usedPrompt}&rdquo;
                 </p>
               </div>
             )}
 
-            {/* AI picks */}
             {synthesis && (
-              <section>
-                <h2 className="text-sm font-semibold text-amber-400 mb-3 flex items-center gap-2">
-                  <span>⭐</span> AI Picks — Best combinations from all 5 agents
+              <section className="space-y-4">
+                <h2 className="text-base font-semibold text-amber-400 flex items-center gap-2">
+                  <span>⭐</span> AI Picks
                 </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <p className="text-xs text-gray-500">Best combinations from all 5 agents</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <OutputCard
                     pattern="directors_cut"
                     label="Director's Cut"
@@ -150,12 +149,11 @@ export default function Home() {
               </section>
             )}
 
-            {/* All agents */}
-            <section>
-              <h2 className="text-sm font-semibold text-gray-400 mb-3">
+            <section className="space-y-4">
+              <h2 className="text-sm font-medium text-gray-400">
                 All 5 Agents
               </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {posts.map((post) => (
                   <OutputCard
                     key={post.pattern}
@@ -170,21 +168,19 @@ export default function Home() {
               </div>
             </section>
 
-            {/* Footer */}
-            <div className="text-center text-gray-600 text-xs pt-4">
+            <div className="text-center text-gray-600 text-xs pt-2 border-t border-gray-800">
               scores are AI-evaluated on humor, virality, originality &amp; cringe authenticity
             </div>
-          </>
+          </div>
         )}
 
-        {/* Empty state */}
         {!isLoading && posts.length === 0 && (
-          <div className="text-center py-20 text-gray-600">
-            <p className="text-4xl mb-4">💀</p>
+          <div className="text-center py-24 text-gray-600">
+            <p className="text-5xl mb-4 animate-bounce">💀</p>
             <p className="text-lg font-medium text-gray-500">
               No shitposts yet
             </p>
-            <p className="text-sm mt-1">
+            <p className="text-sm mt-2 text-gray-600">
               Enter a topic above and watch the chaos unfold
             </p>
           </div>
