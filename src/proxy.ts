@@ -6,7 +6,7 @@ export const config = {
   matcher: '/api/generate',
 };
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   // Skip if Upstash isn't configured (local dev without Redis)
   if (!process.env.UPSTASH_REDIS_REST_URL || !process.env.UPSTASH_REDIS_REST_TOKEN) {
     return NextResponse.next();
