@@ -24,6 +24,7 @@ export default function Home() {
   const [loadingMessage, setLoadingMessage] = useState(LOADING_MESSAGES[0]);
   const [modalMode, setModalMode] = useState<ModalMode | null>(null);
   const [pendingPrompt, setPendingPrompt] = useState<string | null>(null);
+  const [thankYou, setThankYou] = useState(false);
 
   useEffect(() => {
     if (!isLoading) return;
@@ -32,6 +33,28 @@ export default function Home() {
     }, 2000);
     return () => clearInterval(interval);
   }, [isLoading]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const donated = params.get('donated');
+    const sessionId = params.get('session_id');
+
+    if (donated !== 'true' || !sessionId) return;
+
+    // Clear params from URL without page reload
+    window.history.replaceState({}, '', '/');
+
+    fetch('/api/verify-payment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sessionId }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) setThankYou(true);
+      })
+      .catch(() => { /* silent fail */ });
+  }, []);
 
   const handleGenerate = async (prompt: string) => {
     // Show soft wall if limit hit and user hasn't dismissed this session
@@ -105,6 +128,12 @@ export default function Home() {
 
       <main className="max-w-3xl mx-auto px-4 py-6 space-y-4">
         <InputPanel onGenerate={handleGenerate} isLoading={isLoading} />
+
+        {thankYou && (
+          <div className="bg-[#EEF3FB] border border-[#0A66C2]/30 rounded-lg p-3 text-sm text-[#0A66C2] text-center">
+            you&apos;re a legend, genuinely thank you 🙏 you&apos;ve got unlimited generations for 30 days.
+          </div>
+        )}
 
         {error && (
           <div className="bg-[#FEF2F2] border border-[#FECACA] rounded-lg p-4 text-sm text-[#991B1B]">
