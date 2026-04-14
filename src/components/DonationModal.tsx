@@ -71,10 +71,11 @@ export default function DonationModal({ mode, onClose, onBypass }: DonationModal
         <p className="text-sm text-[#555] mb-4 leading-relaxed">{copy.body}</p>
 
         <div className="mb-4">
-          <label className="text-xs text-[#666] block mb-1.5">How much?</label>
+          <label htmlFor="donation-amount" className="text-xs text-[#666] block mb-1.5">How much?</label>
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium text-[#333]">$</span>
             <input
+              id="donation-amount"
               type="number"
               min="1"
               step="1"
