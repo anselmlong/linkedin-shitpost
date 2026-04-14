@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import InputPanel from "@/components/InputPanel";
 import OutputCard from "@/components/OutputCard";
 import type { GeneratedPost } from "@/lib/agents";
+import DonationModal, { type ModalMode } from "@/components/DonationModal";
+import { isSoftLimitHit, hasSeenModalThisSession, markModalSeen, incrementUsage } from "@/lib/usageTracker";
 
 const LOADING_MESSAGES = [
   "5 agents brainstorming your humiliation...",
@@ -20,6 +22,8 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [usedPrompt, setUsedPrompt] = useState<string | null>(null);
   const [loadingMessage, setLoadingMessage] = useState(LOADING_MESSAGES[0]);
+  const [modalMode, setModalMode] = useState<ModalMode | null>(null);
+  const [pendingPrompt, setPendingPrompt] = useState<string | null>(null);
 
   useEffect(() => {
     if (!isLoading) return;
@@ -30,6 +34,13 @@ export default function Home() {
   }, [isLoading]);
 
   const handleGenerate = async (prompt: string) => {
+    // Show soft wall if limit hit and user hasn't dismissed this session
+    if (isSoftLimitHit() && !hasSeenModalThisSession()) {
+      setPendingPrompt(prompt);
+      setModalMode('soft');
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
     setUsedPrompt(prompt);
@@ -44,13 +55,30 @@ export default function Home() {
       console.log("[page] Response status:", res.status);
       console.log("[page] Response data:", data);
 
+      if (res.status === 429) {
+        setIsLoading(false);
+        setModalMode('hard');
+        return;
+      }
+
       if (!res.ok) throw new Error(data.error || "Generation failed");
 
+      incrementUsage();
       setPosts(data.posts);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleBypass = () => {
+    markModalSeen();
+    setModalMode(null);
+    if (pendingPrompt) {
+      const p = pendingPrompt;
+      setPendingPrompt(null);
+      handleGenerate(p);
     }
   };
 
@@ -62,10 +90,16 @@ export default function Home() {
           <div className="w-7 h-7 bg-[#0A66C2] rounded flex items-center justify-center flex-shrink-0">
             <span className="text-white font-extrabold text-base leading-none">in</span>
           </div>
-          <div className="flex items-baseline gap-1.5">
+          <div className="flex items-baseline gap-1.5 flex-1">
             <span className="text-sm font-semibold text-[#191919]">Shitpost Generator</span>
             <span className="text-xs text-[#666]">— don&apos;t actually post these</span>
           </div>
+          <button
+            onClick={() => setModalMode('voluntary')}
+            className="text-xs font-semibold text-[#0A66C2] border border-[#0A66C2] rounded-full px-3 py-1 hover:bg-[#EEF3FB] transition-colors flex-shrink-0"
+          >
+            Support
+          </button>
         </div>
       </header>
 
@@ -145,6 +179,14 @@ export default function Home() {
           </p>
         )}
       </main>
+
+      {modalMode && (
+        <DonationModal
+          mode={modalMode}
+          onClose={() => setModalMode(null)}
+          onBypass={modalMode === 'soft' ? handleBypass : undefined}
+        />
+      )}
     </div>
   );
 }
