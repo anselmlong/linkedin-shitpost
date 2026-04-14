@@ -26,10 +26,14 @@ export function getUsage(): Usage {
 
 export function incrementUsage(): void {
   const usage = getUsage();
-  localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify({ count: usage.count + 1, windowStart: usage.windowStart })
-  );
+  try {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({ count: usage.count + 1, windowStart: usage.windowStart })
+    );
+  } catch {
+    // Storage quota exceeded or unavailable — silently skip
+  }
 }
 
 export function isSoftLimitHit(): boolean {
