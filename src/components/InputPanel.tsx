@@ -19,6 +19,13 @@ export default function InputPanel({ onGenerate, isLoading }: InputPanelProps) {
     await onGenerate(prompt);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      if (prompt.trim() && !isLoading) onGenerate(prompt);
+    }
+  };
+
   return (
     <div className="bg-white border border-[#E0DFDC] rounded-lg p-4">
       <div className="text-sm font-semibold text-[#191919] mb-3">Start a post</div>
@@ -42,9 +49,10 @@ export default function InputPanel({ onGenerate, isLoading }: InputPanelProps) {
                 autoFocus
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value.slice(0, MAX_CHARS))}
+                onKeyDown={handleKeyDown}
                 placeholder="What do you want to thought-leader about?"
                 rows={4}
-                className="flex-1 border border-[#0A66C2] rounded-lg px-3 py-2 text-sm text-[#191919] placeholder-[#666] focus:outline-none resize-none"
+                className="flex-1 border border-[#0A66C2] rounded-lg px-3 py-2 text-sm text-[#191919] placeholder-[#666] focus:outline-none resize-none focus:ring-2 focus:ring-[#0A66C2]/30 transition-shadow"
               />
             </div>
             <div className="flex items-center justify-end gap-3">
@@ -52,7 +60,7 @@ export default function InputPanel({ onGenerate, isLoading }: InputPanelProps) {
               <button
                 type="submit"
                 disabled={isLoading || !prompt.trim()}
-                className="bg-[#0A66C2] hover:bg-[#004182] disabled:bg-[#C0BFBD] disabled:cursor-not-allowed text-white text-sm font-semibold px-5 py-1.5 rounded-full transition-colors"
+                className="bg-[#0A66C2] hover:bg-[#004182] active:scale-[0.97] disabled:bg-[#C0BFBD] disabled:cursor-not-allowed text-white text-sm font-semibold px-5 py-1.5 rounded-full transition-all duration-150"
               >
                 {isLoading ? "Generating..." : "Shitpost"}
               </button>

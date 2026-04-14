@@ -1,16 +1,11 @@
 import { createOpenAI } from "@ai-sdk/openai";
 
-const openrouter = createOpenAI({
-  baseURL: "https://openrouter.ai/api/v1",
-  apiKey: process.env.OPENROUTER_API_KEY,
+const openai = createOpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
-export const getModel = (model = "anthropoid/haiku") =>
-  openrouter(model);
+export const getModel = (model: string) => openai(model);
 
-export const MAIN = "openrouter/free"
 export const MODELS = {
-  generate: MAIN,
-  evaluate: MAIN,
-  synthesize: MAIN
+  generate: "gpt-4.1-nano",
 } as const;
