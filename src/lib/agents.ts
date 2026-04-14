@@ -209,7 +209,6 @@ export async function generateAllPosts(userPrompt: string): Promise<GeneratedPos
         model: getModel(MODELS.generate),
         system: agent.system,
         prompt: `Topic: ${userPrompt}`,
-        temperature: 0.9,
         maxOutputTokens: 600,
       });
 

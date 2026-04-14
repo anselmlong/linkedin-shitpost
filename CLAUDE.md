@@ -26,6 +26,7 @@ This is the **LinkedIn Shitpost Generator** - a satirical web app that generates
 - Simple FormData with just prompt
 - Tailwind CSS v4 with `@import "tailwindcss"` syntax
 - Dark theme with custom CSS variables in `globals.css`
+- Use bun instead of npm
 
 ## Common Tasks
 
@@ -39,3 +40,4 @@ This is the **LinkedIn Shitpost Generator** - a satirical web app that generates
 - Missing API keys will show errors in UI but won't crash
 - Tailwind v4 uses `@import` not `@tailwind` directives
 - Next.js 16 with React 19 - some patterns differ from older versions
+

@@ -11,7 +11,7 @@ import {
 const STORAGE_KEY = 'shitpost_usage';
 
 beforeEach(() => {
-  localStorage.clear();
+  globalThis.localStorage.clear();
   _resetSessionFlag();
 });
 
@@ -21,7 +21,7 @@ describe('getUsage', () => {
   });
 
   it('resets count to 0 when 24h window has expired', () => {
-    localStorage.setItem(
+    globalThis.localStorage.setItem(
       STORAGE_KEY,
       JSON.stringify({ count: 5, windowStart: Date.now() - 25 * 60 * 60 * 1000 })
     );
@@ -29,7 +29,7 @@ describe('getUsage', () => {
   });
 
   it('returns stored count when within 24h window', () => {
-    localStorage.setItem(
+    globalThis.localStorage.setItem(
       STORAGE_KEY,
       JSON.stringify({ count: 2, windowStart: Date.now() - 1000 })
     );

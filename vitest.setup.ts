@@ -1,6 +1,4 @@
-declare global {
-  var localStorage: Storage;
-}
+import { vi } from 'vitest';
 
 const localStorageMock = (() => {
   let store: Record<string, string> = {};
@@ -11,7 +9,12 @@ const localStorageMock = (() => {
     clear: (): void => { store = {}; },
     get length(): number { return Object.keys(store).length; },
     key: (index: number): string | null => Object.keys(store)[index] ?? null,
-  };
+  } as Storage;
 })();
 
-globalThis.localStorage = localStorageMock as any;
+Object.defineProperty(globalThis, 'localStorage', {
+  value: localStorageMock,
+  writable: true,
+  enumerable: true,
+  configurable: true,
+});
