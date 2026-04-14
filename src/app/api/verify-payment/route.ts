@@ -6,7 +6,7 @@ import { randomUUID } from 'crypto';
 export const runtime = 'nodejs';
 
 export async function POST(req: NextRequest) {
-  if (!process.env.STRIPE_SECRET_KEY) {
+  if (!process.env.STRIPE_API_KEY) {
     return NextResponse.json({ success: false, error: 'Stripe not configured' }, { status: 500 });
   }
   if (!process.env.UPSTASH_REDIS_REST_URL || !process.env.UPSTASH_REDIS_REST_TOKEN) {
@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: 'Missing sessionId' }, { status: 400 });
     }
 
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+    const stripe = new Stripe(process.env.STRIPE_API_KEY);
     const session = await stripe.checkout.sessions.retrieve(sessionId);
 
     if (session.payment_status !== 'paid') {

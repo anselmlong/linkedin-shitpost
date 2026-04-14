@@ -6,11 +6,11 @@ const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://shitpost.anselmlon
 export const runtime = 'nodejs';
 
 export async function POST(req: NextRequest) {
-  if (!process.env.STRIPE_SECRET_KEY) {
+  if (!process.env.STRIPE_API_KEY) {
     return NextResponse.json({ error: 'Stripe not configured' }, { status: 500 });
   }
 
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+  const stripe = new Stripe(process.env.STRIPE_API_KEY);
 
   try {
     const { amount } = await req.json();

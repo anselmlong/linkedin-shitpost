@@ -205,14 +205,17 @@ export async function generateAllPosts(userPrompt: string): Promise<GeneratedPos
 
   const results = await Promise.all(
     agents.map(async (agent) => {
-      const { text } = await generateText({
+      const result = await generateText({
         model: getModel(MODELS.generate),
         system: agent.system,
         prompt: `Topic: ${userPrompt}`,
-        maxOutputTokens: 600,
+        maxOutputTokens: 2000,
+        providerOptions: {
+          openai: { reasoningEffort: "minimal" },
+        },
       });
 
-      console.log("[agents] Raw response from", agent.name, ":", text?.slice(0, 200));
+      const text = result.text;
 
       const post = text.replace(/^```(?:text)?\s*/i, "").replace(/\s*```$/, "").trim();
 
