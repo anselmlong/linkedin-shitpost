@@ -62,78 +62,95 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 text-gray-100">
-      {/* Header */}
-      <header className="border-b border-gray-800 bg-gray-900/80 backdrop-blur sticky top-0 z-10">
-        <div className="max-w-4xl mx-auto px-6 py-4 flex items-center gap-3">
-          <span className="text-2xl">💀</span>
-          <div>
-            <h1 className="font-bold text-lg text-white">
-              LinkedIn Shitpost Generator
-            </h1>
-            <p className="text-xs text-gray-400">
-              5 agents. 2 AI-curated picks. Pick your fighter.
-            </p>
+    <div className="min-h-screen bg-[#F3F2EF]">
+      {/* LinkedIn-style nav */}
+      <header className="bg-white border-b border-[#E0DFDC] sticky top-0 z-10 shadow-[0_1px_3px_rgba(0,0,0,0.08)]">
+        <div className="max-w-3xl mx-auto px-4 h-12 flex items-center gap-3">
+          <div className="w-7 h-7 bg-[#0A66C2] rounded flex items-center justify-center flex-shrink-0">
+            <span className="text-white font-extrabold text-base leading-none">in</span>
+          </div>
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-sm font-semibold text-[#191919]">Shitpost Generator</span>
+            <span className="text-xs text-[#666]">— don&apos;t actually post these</span>
           </div>
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-6 py-10 space-y-12">
-        <section>
-          <InputPanel onGenerate={handleGenerate} isLoading={isLoading} />
-        </section>
+      <main className="max-w-3xl mx-auto px-4 py-6 space-y-4">
+        <InputPanel onGenerate={handleGenerate} isLoading={isLoading} />
 
         {error && (
-          <div className="bg-red-900/30 border border-red-800 rounded-lg p-4 text-red-300 text-sm">
+          <div className="bg-[#FEF2F2] border border-[#FECACA] rounded-lg p-4 text-sm text-[#991B1B]">
             <strong>Error:</strong> {error}
           </div>
         )}
 
         {isLoading && (
-          <section className="space-y-6">
-            <p className="text-center text-gray-500 text-sm animate-pulse">
+          <div className="space-y-4">
+            <p className="text-center text-[#666] text-xs animate-pulse py-2">
               {loadingMessage}
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="bg-gray-800/50 border border-gray-700/50 rounded-xl overflow-hidden animate-pulse"
-                >
-                  <div className="h-12 bg-gray-700/60 rounded-t-xl" />
-                  <div className="p-4 space-y-3">
-                    <div className="h-4 bg-gray-700/60 rounded w-3/4" />
-                    <div className="h-4 bg-gray-700/40 rounded" />
-                    <div className="h-4 bg-gray-700/40 rounded w-1/2" />
+            {/* Featured skeletons */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {[0, 1].map((i) => (
+                <div key={i} className="bg-white border border-[#E0DFDC] rounded-lg overflow-hidden" style={{ borderTop: "3px solid #E0DFDC" }}>
+                  <div className="h-8 bg-[#F3F2EF] animate-pulse" />
+                  <div className="p-3 space-y-2">
+                    <div className="flex gap-2 items-center">
+                      <div className="w-8 h-8 rounded-full bg-[#E0DFDC] animate-pulse flex-shrink-0" />
+                      <div className="space-y-1 flex-1">
+                        <div className="h-2.5 bg-[#E0DFDC] animate-pulse rounded w-1/3" />
+                        <div className="h-2 bg-[#E0DFDC] animate-pulse rounded w-1/2" />
+                      </div>
+                    </div>
+                    <div className="h-2.5 bg-[#E0DFDC] animate-pulse rounded" />
+                    <div className="h-2.5 bg-[#E0DFDC] animate-pulse rounded w-4/5" />
+                    <div className="h-2.5 bg-[#E0DFDC] animate-pulse rounded w-3/5" />
                   </div>
                 </div>
               ))}
             </div>
-          </section>
+            {/* Agent skeletons */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {[0, 1, 2, 3].map((i) => (
+                <div key={i} className="bg-white border border-[#E0DFDC] rounded-lg overflow-hidden">
+                  <div className="h-6 bg-[#F3F2EF] animate-pulse" />
+                  <div className="p-3 space-y-2">
+                    <div className="flex gap-2 items-center">
+                      <div className="w-8 h-8 rounded-full bg-[#E0DFDC] animate-pulse flex-shrink-0" />
+                      <div className="space-y-1 flex-1">
+                        <div className="h-2.5 bg-[#E0DFDC] animate-pulse rounded w-1/4" />
+                        <div className="h-2 bg-[#E0DFDC] animate-pulse rounded w-2/5" />
+                      </div>
+                    </div>
+                    <div className="h-2.5 bg-[#E0DFDC] animate-pulse rounded" />
+                    <div className="h-2.5 bg-[#E0DFDC] animate-pulse rounded w-3/4" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         )}
 
         {!isLoading && posts.length > 0 && (
-          <div className="space-y-10">
+          <div className="space-y-6">
             {usedPrompt && (
-              <div className="text-center pb-2">
-                <p className="text-gray-500 text-xs italic">
-                  &ldquo;{usedPrompt}&rdquo;
-                </p>
-              </div>
+              <p className="text-center text-[#666] text-xs italic">
+                &ldquo;{usedPrompt}&rdquo;
+              </p>
             )}
 
             {synthesis && (
-              <section className="space-y-4">
-                <h2 className="text-base font-semibold text-amber-400 flex items-center gap-2">
-                  <span>⭐</span> AI Picks
-                </h2>
-                <p className="text-xs text-gray-500">Best combinations from all 5 agents</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <section className="space-y-3">
+                <p className="text-[10px] font-bold text-[#666] uppercase tracking-wide">
+                  ⭐ AI Picks
+                </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <OutputCard
                     pattern="directors_cut"
                     label="Director's Cut"
-                    emoji="⭐"
-                    color="from-amber-500 to-yellow-400"
+                    emoji="🎬"
+                    color=""
                     post={synthesis.directors_cut}
                     isAiPick
                   />
@@ -141,7 +158,7 @@ export default function Home() {
                     pattern="roast_mode"
                     label="Roast Mode"
                     emoji="🔥"
-                    color="from-orange-500 to-red-500"
+                    color=""
                     post={synthesis.roast_mode}
                     isAiPick
                   />
@@ -149,11 +166,11 @@ export default function Home() {
               </section>
             )}
 
-            <section className="space-y-4">
-              <h2 className="text-sm font-medium text-gray-400">
+            <section className="space-y-3">
+              <p className="text-[10px] font-bold text-[#666] uppercase tracking-wide">
                 All 5 Agents
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {posts.map((post) => (
                   <OutputCard
                     key={post.pattern}
@@ -168,22 +185,16 @@ export default function Home() {
               </div>
             </section>
 
-            <div className="text-center text-gray-600 text-xs pt-2 border-t border-gray-800">
+            <p className="text-center text-[#666] text-[10px] pt-2 border-t border-[#E0DFDC]">
               scores are AI-evaluated on humor, virality, originality &amp; cringe authenticity
-            </div>
+            </p>
           </div>
         )}
 
         {!isLoading && posts.length === 0 && (
-          <div className="text-center py-24 text-gray-600">
-            <p className="text-5xl mb-4 animate-bounce">💀</p>
-            <p className="text-lg font-medium text-gray-500">
-              No shitposts yet
-            </p>
-            <p className="text-sm mt-2 text-gray-600">
-              Enter a topic above and watch the chaos unfold
-            </p>
-          </div>
+          <p className="text-center text-[#666] text-sm py-16">
+            Enter a topic above and hit <strong>Shitpost</strong>.
+          </p>
         )}
       </main>
     </div>
