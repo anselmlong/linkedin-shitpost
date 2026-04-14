@@ -1,12 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://shitpost.anselmlong.com';
 
 export const runtime = 'nodejs';
 
 export async function POST(req: NextRequest) {
+  if (!process.env.STRIPE_SECRET_KEY) {
+    return NextResponse.json({ error: 'Stripe not configured' }, { status: 500 });
+  }
+
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
   try {
     const { amount } = await req.json();
     const amountCents = Math.round(Math.max(1, Number(amount) || 1) * 100);
