@@ -111,17 +111,15 @@ export default function Home() {
     <div className="min-h-screen bg-[#F3F2EF]">
       {/* LinkedIn-style nav */}
       <header className="bg-white border-b border-[#E0DFDC] sticky top-0 z-10 shadow-[0_1px_3px_rgba(0,0,0,0.08)]">
-        <div className="max-w-3xl mx-auto px-4 h-12 flex items-center gap-3">
+        <div className="max-w-3xl mx-auto px-4 h-12 flex items-center gap-1">
+          <span className="text-sm font-semibold text-[#191919]">sh</span>
           <div className="w-7 h-7 bg-[#0A66C2] rounded flex items-center justify-center flex-shrink-0">
-            <span className="text-white font-extrabold text-base leading-none">in</span>
+            <span className="text-white font-extrabold text-base leading-none">it</span>
           </div>
-          <div className="flex items-baseline gap-1.5 flex-1">
-            <span className="text-sm font-semibold text-[#191919]">Shitpost Generator</span>
-            <span className="text-xs text-[#666]">— don&apos;t actually post these</span>
-          </div>
+          <span className="text-sm font-semibold text-[#191919]">/post</span>
           <button
             onClick={() => setModalMode('voluntary')}
-            className="text-xs font-semibold text-[#0A66C2] border border-[#0A66C2] rounded-full px-3 py-1 hover:bg-[#EEF3FB] transition-colors flex-shrink-0"
+            className="text-xs font-semibold text-[#0A66C2] border border-[#0A66C2] rounded-full px-3 py-1 hover:bg-[#EEF3FB] transition-colors flex-shrink-0 ml-auto"
           >
             Support
           </button>
