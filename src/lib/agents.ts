@@ -206,7 +206,7 @@ export async function generateAllPosts(userPrompt: string): Promise<GeneratedPos
     { name: "tech-bro", system: SYSTEM_TECH_BRO },
     { name: "tryhard", system: SYSTEM_TRYHARD },
     { name: "unhinged", system: SYSTEM_UNHINGED },
-    { name: "lucius", system: SYSTEM_LUCIUS },
+    { name: "singaporean", system: SYSTEM_LUCIUS },
     { name: "lowercase", system: SYSTEM_LOWERCASE },
     { name: "anselm", system: SYSTEM_ANSELM },
   ] as const;

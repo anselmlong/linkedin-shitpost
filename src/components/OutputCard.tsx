@@ -42,7 +42,7 @@ const AGENT_CONFIG: Record<string, {
     fakeName: "You",
     fakeTitle: "Your attention is currency",
   },
-  "lucius": {
+  "singaporean": {
     label: "Lucius",
     emoji: "🍹",
     avatarColor: "#14B8A6",
