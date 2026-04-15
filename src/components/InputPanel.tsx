@@ -99,6 +99,14 @@ export default function InputPanel({ onGenerate, isLoading }: InputPanelProps) {
             <div className="flex items-center justify-end gap-3">
               <span className="text-xs text-[#666]">{prompt.length}/{MAX_CHARS}</span>
               <button
+                type="button"
+                onClick={handleRandom}
+                disabled={isLoading}
+                className="border border-[#0A66C2] text-[#0A66C2] hover:bg-[#EEF3FB] disabled:border-[#C0BFBD] disabled:text-[#C0BFBD] disabled:cursor-not-allowed text-sm font-semibold px-5 py-1.5 rounded-full transition-colors"
+              >
+                Random
+              </button>
+              <button
                 type="submit"
                 disabled={isLoading || !prompt.trim()}
                 className="bg-[#0A66C2] hover:bg-[#004182] active:scale-[0.97] disabled:bg-[#C0BFBD] disabled:cursor-not-allowed text-white text-sm font-semibold px-5 py-1.5 rounded-full transition-all duration-150"
