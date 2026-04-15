@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-export type ModalMode = 'voluntary' | 'soft' | 'hard';
+export type ModalMode = 'voluntary' | 'soft';
 
 interface DonationModalProps {
   mode: ModalMode;
@@ -18,10 +18,6 @@ const COPY: Record<ModalMode, { title: string; body: string }> = {
   soft: {
     title: 'hey, real quick',
     body: "okay so you've used this a few times now. look — i'm a broke college student and these AI API calls genuinely cost money. i'm not asking for much. even $1 helps keep this running. please? 🥺",
-  },
-  hard: {
-    title: "okay you've really gone to town",
-    body: "you've hit the daily limit. i respect the dedication, genuinely. but the wall is real this time — it resets in 24 hours. if you want to keep going RIGHT now, you can support the cause and get unlimited generations for 30 days. please? 🥺",
   },
 };
 
@@ -57,15 +53,13 @@ export default function DonationModal({ mode, onClose, onBypass }: DonationModal
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-xl max-w-sm w-full p-6 shadow-xl relative">
-        {mode !== 'hard' && (
-          <button
+        <button
             onClick={onClose}
             className="absolute top-3 right-3 text-[#999] hover:text-[#333] text-xl leading-none"
             aria-label="Close"
           >
             ×
           </button>
-        )}
 
         <h2 className="text-base font-bold text-[#191919] mb-2">{copy.title}</h2>
         <p className="text-sm text-[#555] mb-4 leading-relaxed">{copy.body}</p>
@@ -107,15 +101,6 @@ export default function DonationModal({ mode, onClose, onBypass }: DonationModal
             className="w-full text-[#666] text-xs py-1.5 hover:text-[#333] transition-colors"
           >
             I&apos;m broke too, let me through
-          </button>
-        )}
-
-        {mode === 'hard' && (
-          <button
-            onClick={onClose}
-            className="w-full text-[#666] text-xs py-1.5 hover:text-[#333] transition-colors"
-          >
-            okay fine :(
           </button>
         )}
       </div>

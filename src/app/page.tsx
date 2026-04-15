@@ -79,12 +79,6 @@ export default function Home() {
       console.log("[page] Response status:", res.status);
       console.log("[page] Response data:", data);
 
-      if (res.status === 429) {
-        setIsLoading(false);
-        setModalMode('hard');
-        return;
-      }
-
       if (!res.ok) throw new Error(data.error || "Generation failed");
 
       incrementUsage();
