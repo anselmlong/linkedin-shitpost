@@ -8,14 +8,13 @@ import DonationModal, { type ModalMode } from "@/components/DonationModal";
 import { isSoftLimitHit, hasSeenModalThisSession, markModalSeen, incrementUsage } from "@/lib/usageTracker";
 
 const LOADING_MESSAGES = [
+  "Thinking out of the box...",
   "6 agents brainstorming your humiliation...",
   "Teaching AI to roast people...",
   "Generating chaos...",
-  "Consulting the dark comedy council...",
-  "Distilling pure cringe...",
   "Brewing the perfect shitpost...",
   "Consulting professional cringe practitioners...",
-  "Mining for maximum second-hand embarrassment...",
+  "Thought leadering...",
 ];
 
 export default function Home() {
@@ -116,7 +115,7 @@ export default function Home() {
           <div className="w-7 h-7 bg-[#0A66C2] rounded flex items-center justify-center flex-shrink-0">
             <span className="text-white font-extrabold text-base leading-none">it</span>
           </div>
-          <span className="text-sm font-semibold text-[#191919]">/post</span>
+          <span className="text-sm font-semibold text-[#191919]">post</span>
           <button
             onClick={() => setModalMode('voluntary')}
             className="text-xs font-semibold text-[#0A66C2] border border-[#0A66C2] rounded-full px-3 py-1 hover:bg-[#EEF3FB] transition-colors flex-shrink-0 ml-auto"
