@@ -9,6 +9,39 @@ interface InputPanelProps {
 
 const MAX_CHARS = 3000;
 
+const PROMPTS = [
+  // Current Events (tech news)
+  "Claude can now read your Gmail",
+  "Claude Mythos is more powerful than Opus",
+  "AI models can now exploit zero-day vulnerabilities",
+  "OpenAI and Anthropic are competing for enterprise",
+  "Project Glasswing is using AI for cybersecurity",
+  // Daily Life / Mundane
+  "Forgot to eat lunch until 3pm",
+  "The office AC is too cold",
+  "My laptop has been updating for 2 hours",
+  "I accidentally replied all to the entire company",
+  "The coffee machine is broken again",
+  "My Slack notifications have 847 unread messages",
+  // Generic Thought Leader
+  "Cold showers changed my life",
+  "I learned everything from my 4-year-old",
+  "Failure is just success that hasn't happened yet",
+  "Sleep is for the weak",
+  "My commute is my thinking time",
+  // Workplace Absurdity
+  "The meeting that could have been an email",
+  "Someone else's code in production",
+  "Requirements that changed three times today",
+  "The documentation that doesn't exist",
+  "Standup when you haven't made progress",
+  // Silly / Over-the-Top
+  "I decided to optimize my sleep schedule with AI",
+  "My dog is my co-founder",
+  "I have a cold and it's affecting my throughput",
+  "Hot take: tabs are better than spaces",
+] as const;
+
 export default function InputPanel({ onGenerate, isLoading }: InputPanelProps) {
   const [prompt, setPrompt] = useState("");
   const [expanded, setExpanded] = useState(false);
