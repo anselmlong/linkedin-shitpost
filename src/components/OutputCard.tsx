@@ -14,50 +14,57 @@ const AGENT_CONFIG: Record<string, {
   label: string;
   emoji: string;
   avatarColor: string;
+  avatarGradient: string;
   fakeName: string;
   fakeTitle: string;
 }> = {
   "tech-bro": {
     label: "Tech Bro",
-    emoji: "🎭",
+    emoji: "🎓",
     avatarColor: "#0A66C2",
+    avatarGradient: "linear-gradient(135deg, #0A66C2 0%, #004182 100%)",
     fakeName: "You",
-    fakeTitle: "Disrupting disruption at Scale",
+    fakeTitle: "Founder @disrupting_things",
   },
-  "absurdist": {
-    label: "Absurdist",
-    emoji: "🌀",
+  "tryhard": {
+    label: "Tryhard",
+    emoji: "🌟",
     avatarColor: "#8B5CF6",
+    avatarGradient: "linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%)",
     fakeName: "You",
-    fakeTitle: "Existential Strategist",
+    fakeTitle: "Chief Momentum Officer",
   },
   "unhinged": {
-    label: "Unhinged Hook",
-    emoji: "😱",
+    label: "Unhinged",
+    emoji: "🔥",
     avatarColor: "#F59E0B",
+    avatarGradient: "linear-gradient(135deg, #F59E0B 0%, #D97706 100%)",
     fakeName: "You",
-    fakeTitle: "Thought Leader (self-appointed)",
+    fakeTitle: "Your attention is currency",
   },
   "lucius": {
     label: "Lucius",
-    emoji: "🧉",
+    emoji: "🍹",
     avatarColor: "#14B8A6",
+    avatarGradient: "linear-gradient(135deg, #14B8A6 0%, #0D9488 100%)",
     fakeName: "you",
-    fakeTitle: "singaporean at large",
+    fakeTitle: "fruits enthusiast",
   },
   "lowercase": {
-    label: "Lowercase Tryhard",
-    emoji: "✍️",
+    label: "Lowercase",
+    emoji: "✨",
     avatarColor: "#10B981",
+    avatarGradient: "linear-gradient(135deg, #10B981 0%, #059669 100%)",
     fakeName: "you",
-    fakeTitle: "vibes & growth",
+    fakeTitle: "posting from the void",
   },
-  "boomer": {
-    label: "Boomer Trying",
-    emoji: "👴",
+  "anselm": {
+    label: "Anselm",
+    emoji: "💻",
     avatarColor: "#EC4899",
-    fakeName: "you",
-    fakeTitle: "learning from nephew",
+    avatarGradient: "linear-gradient(135deg, #EC4899 0%, #DB2777 100%)",
+    fakeName: "Anselm",
+    fakeTitle: "computing student",
   },
 };
 
@@ -74,6 +81,7 @@ export default function OutputCard({ pattern, post }: OutputCardProps) {
     label: pattern,
     emoji: "📝",
     avatarColor: "#C0BFBD",
+    avatarGradient: "linear-gradient(135deg, #C0BFBD 0%, #A1A09E 100%)",
     fakeName: "You",
     fakeTitle: "LinkedIn Member",
   };
@@ -88,9 +96,11 @@ export default function OutputCard({ pattern, post }: OutputCardProps) {
       <div className="p-4">
         <div className="flex items-center gap-3 mb-3">
           <div
-            className="w-10 h-10 rounded-full flex-shrink-0"
-            style={{ background: agent.avatarColor }}
-          />
+            className="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center"
+            style={{ background: agent.avatarGradient }}
+          >
+            <span className="text-white text-xs font-bold">{agent.emoji}</span>
+          </div>
           <div>
             <div className="text-sm font-semibold text-[#191919]">{agent.fakeName}</div>
             <div className="text-xs text-[#666]">{agent.fakeTitle}</div>

@@ -8,12 +8,14 @@ import DonationModal, { type ModalMode } from "@/components/DonationModal";
 import { isSoftLimitHit, hasSeenModalThisSession, markModalSeen, incrementUsage } from "@/lib/usageTracker";
 
 const LOADING_MESSAGES = [
-  "5 agents brainstorming your humiliation...",
+  "6 agents brainstorming your humiliation...",
   "Teaching AI to roast people...",
   "Generating chaos...",
   "Consulting the dark comedy council...",
   "Distilling pure cringe...",
   "Brewing the perfect shitpost...",
+  "Consulting professional cringe practitioners...",
+  "Mining for maximum second-hand embarrassment...",
 ];
 
 export default function Home() {
@@ -203,9 +205,14 @@ export default function Home() {
         )}
 
         {!isLoading && posts.length === 0 && (
-          <p className="text-center text-[#666] text-sm py-16">
-            Enter a topic above and hit <strong>Shitpost</strong>.
-          </p>
+          <div className="space-y-2 py-16">
+            <p className="text-center text-[#191919] text-2xl font-extrabold">
+              Your career depends on this.
+            </p>
+            <p className="text-center text-[#666] text-sm">
+              Actually no, please don't post these on LinkedIn.
+            </p>
+          </div>
         )}
       </main>
 

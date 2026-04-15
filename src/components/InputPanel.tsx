@@ -77,7 +77,7 @@ export default function InputPanel({ onGenerate, isLoading }: InputPanelProps) {
             <button
               type="button"
               onClick={() => setExpanded(true)}
-              className="flex-1 text-left border border-[#C0BFBD] rounded-full px-4 py-2 text-sm text-[#666] hover:bg-[#F3F2EF] transition-colors"
+              className="flex-1 text-left border border-[#C0BFBD] rounded-full px-4 py-2 text-sm text-[#666] hover:bg-[#F3F2EF] hover:border-[#0A66C2] hover:text-[#0A66C2] transition-colors"
             >
               What do you want to thought-leader about?
             </button>
@@ -102,14 +102,14 @@ export default function InputPanel({ onGenerate, isLoading }: InputPanelProps) {
                 type="button"
                 onClick={handleRandom}
                 disabled={isLoading}
-                className="border border-[#0A66C2] text-[#0A66C2] hover:bg-[#EEF3FB] disabled:border-[#C0BFBD] disabled:text-[#C0BFBD] disabled:cursor-not-allowed text-sm font-semibold px-5 py-1.5 rounded-full transition-colors"
+                className="border border-[#0A66C2] text-[#0A66C2] hover:bg-[#EEF3FB] hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98] disabled:border-[#C0BFBD] disabled:text-[#C0BFBD] disabled:cursor-not-allowed text-sm font-semibold px-5 py-1.5 rounded-full transition-all duration-150"
               >
                 Random
               </button>
               <button
                 type="submit"
                 disabled={isLoading || !prompt.trim()}
-                className="bg-[#0A66C2] hover:bg-[#004182] active:scale-[0.97] disabled:bg-[#C0BFBD] disabled:cursor-not-allowed text-white text-sm font-semibold px-5 py-1.5 rounded-full transition-all duration-150"
+                className="bg-[#0A66C2] hover:bg-[#004182] hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.97] disabled:bg-[#C0BFBD] disabled:cursor-not-allowed text-white text-sm font-semibold px-5 py-1.5 rounded-full transition-all duration-150"
               >
                 {isLoading ? "Generating..." : "Shitpost"}
               </button>

@@ -15,6 +15,12 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "LinkedIn Shitpost Generator",
   description: "Generate satirical LinkedIn posts from any topic or image",
+  icons: [
+    {
+      url: "/favicon.svg",
+      type: "image/svg+xml",
+    },
+  ],
 };
 
 export default function RootLayout({
