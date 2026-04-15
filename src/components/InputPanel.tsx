@@ -59,6 +59,14 @@ export default function InputPanel({ onGenerate, isLoading }: InputPanelProps) {
     }
   };
 
+  const handleRandom = async () => {
+    if (isLoading) return;
+    const randomPrompt = PROMPTS[Math.floor(Math.random() * PROMPTS.length)];
+    setPrompt(randomPrompt);
+    setExpanded(true);
+    await onGenerate(randomPrompt);
+  };
+
   return (
     <div className="bg-white border border-[#E0DFDC] rounded-lg p-4">
       <div className="text-sm font-semibold text-[#191919] mb-3">Start a post</div>
