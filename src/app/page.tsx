@@ -135,30 +135,36 @@ export default function Home() {
         )}
 
         {isLoading && (
-          <div className="space-y-4">
+          <div className="space-y-2">
             <p className="text-center text-[#666] text-xs animate-pulse py-2">
               {loadingMessage}
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {[0, 1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="bg-white border border-[#E0DFDC] rounded-lg overflow-hidden">
-                  <div className="h-8 bg-[#F3F2EF] animate-pulse" />
-                  <div className="p-4 space-y-3">
-                    <div className="flex gap-3 items-center">
-                      <div className="w-10 h-10 rounded-full bg-[#E0DFDC] animate-pulse flex-shrink-0" />
-                      <div className="space-y-2 flex-1">
-                        <div className="h-4 bg-[#E0DFDC] animate-pulse rounded w-1/4" />
-                        <div className="h-3 bg-[#E0DFDC] animate-pulse rounded w-2/5" />
-                      </div>
+            {[0, 1, 2, 3].map((i) => (
+              <div key={i} className="bg-white border border-[#E0DFDC] rounded-lg overflow-hidden">
+                <div className="px-4 pt-3 pb-2">
+                  <div className="flex gap-2.5 items-start">
+                    <div className="w-12 h-12 rounded-full bg-[#E0DFDC] animate-pulse flex-shrink-0" />
+                    <div className="space-y-2 flex-1 pt-1">
+                      <div className="h-3.5 bg-[#E0DFDC] animate-pulse rounded w-24" />
+                      <div className="h-3 bg-[#E0DFDC] animate-pulse rounded w-40" />
+                      <div className="h-3 bg-[#E0DFDC] animate-pulse rounded w-12" />
                     </div>
-                    <div className="h-4 bg-[#E0DFDC] animate-pulse rounded" />
-                    <div className="h-4 bg-[#E0DFDC] animate-pulse rounded w-4/5" />
-                    <div className="h-4 bg-[#E0DFDC] animate-pulse rounded w-3/5" />
-                    <div className="h-4 bg-[#E0DFDC] animate-pulse rounded w-1/2" />
+                  </div>
+                  <div className="mt-3 space-y-2">
+                    <div className="h-3.5 bg-[#E0DFDC] animate-pulse rounded" />
+                    <div className="h-3.5 bg-[#E0DFDC] animate-pulse rounded w-11/12" />
+                    <div className="h-3.5 bg-[#E0DFDC] animate-pulse rounded w-4/5" />
+                    <div className="h-3.5 bg-[#E0DFDC] animate-pulse rounded w-3/5" />
                   </div>
                 </div>
-              ))}
-            </div>
+                <div className="border-t border-[#E0DFDC] mx-0 mt-2" />
+                <div className="flex gap-1 px-2 py-1.5">
+                  {[0, 1, 2, 3].map((j) => (
+                    <div key={j} className="h-8 bg-[#F3F2EF] animate-pulse rounded flex-1" />
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
         )}
 
@@ -170,28 +176,23 @@ export default function Home() {
               </p>
             )}
 
-            <section className="space-y-3">
-              <p className="text-[10px] font-bold text-[#666] uppercase tracking-wide">
-                All 6 Agents
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {posts.map((post, i) => (
-                  <div
-                    key={post.pattern}
-                    className="opacity-0 animate-[fadeIn_0.4s_ease-out_forwards]"
-                    style={{ animationDelay: `${i * 80}ms` }}
-                  >
-                    <OutputCard
-                      pattern={post.pattern}
-                      label={post.pattern}
-                      emoji=""
-                      color=""
-                      post={post.post}
-                    />
-                  </div>
-                ))}
-              </div>
-            </section>
+            <div className="space-y-2">
+              {posts.map((post, i) => (
+                <div
+                  key={post.pattern}
+                  className="opacity-0 animate-[fadeIn_0.4s_ease-out_forwards]"
+                  style={{ animationDelay: `${i * 80}ms` }}
+                >
+                  <OutputCard
+                    pattern={post.pattern}
+                    label={post.pattern}
+                    emoji=""
+                    color=""
+                    post={post.post}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
