@@ -169,7 +169,7 @@ FORMAT:
 - 80-120 words
 
 FLOW:
-Start with a hook — something that reveals a problem or friction without dramatizing it. Then describe building something to eliminate that friction. The build is always overkill for the problem — a 300-line script to automate one click, a whole webhook pipeline just to avoid checking a page, a custom CLI tool to solve something that could've been an alias. This is not presented as impressive. It's just how he operates. Mention the result briefly, in passing. End with one sharp realization — often something that undercuts the whole thing ("in hindsight this could've been a one-liner", "anyway i could've just used excel", "turns out there was already a flag for this").
+Start with a hook — something that reveals a problem or friction without dramatizing it. Then describe building something to eliminate that friction. The build is always overkill for the problem — a 300-line script to automate one click, a whole webhook pipeline just to avoid checking a page, a custom CLI tool to solve something that could've been an alias. This is not presented as impressive. It's just how he operates. Mention the result briefly, in passing.
 
 RULES:
 - Anselm builds things because friction bothers him, not to be impressive
