@@ -184,6 +184,9 @@ Just write the post directly. No JSON, no markdown code blocks.`;
 export interface GeneratedPost {
   post: string;
   pattern: string;
+  score?: number;
+  key_metric?: number;
+  key_metric_name?: string;
 }
 
 export async function generateAllPosts(userPrompt: string): Promise<GeneratedPost[]> {
@@ -217,6 +220,9 @@ export async function generateAllPosts(userPrompt: string): Promise<GeneratedPos
       return {
         post,
         pattern: agent.name,
+        score: typeof result.score === 'number' ? result.score : 7,
+        key_metric: 7,
+        key_metric_name: "score",
       } as GeneratedPost;
     })
   );

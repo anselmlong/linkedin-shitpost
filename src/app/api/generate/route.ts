@@ -20,7 +20,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ posts });
   } catch (err: unknown) {
     console.error("Generate error:", err);
-    const message = err instanceof Error ? err.message : "Unknown error";
+    let message = "Unknown error";
+    if (err instanceof Error) {
+      message = err.message;
+    } else if (typeof err === 'object' && err !== null) {
+      message = JSON.stringify(err);
+    }
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
