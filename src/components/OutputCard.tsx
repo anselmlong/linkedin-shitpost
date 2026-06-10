@@ -93,11 +93,31 @@ export default function OutputCard({ pattern, post }: OutputCardProps) {
   const [copied, setCopied] = useState(false);
   const [liked, setLiked] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const [shareState, setShareState] = useState<"idle" | "working" | "copied" | "error">("idle");
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(post);
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
+  };
+
+  const handleShare = async () => {
+    if (shareState === "working") return;
+    setShareState("working");
+    try {
+      const res = await fetch("/api/share", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ post, pattern }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      await navigator.clipboard.writeText(`${window.location.origin}${data.url}`);
+      setShareState("copied");
+    } catch {
+      setShareState("error");
+    }
+    setTimeout(() => setShareState("idle"), 2000);
   };
 
   const agent = AGENT_CONFIG[pattern] ?? {
@@ -239,12 +259,24 @@ export default function OutputCard({ pattern, post }: OutputCardProps) {
           <span>Repost</span>
         </button>
 
-        <button className="flex items-center justify-center gap-1.5 py-2.5 flex-1 rounded text-[#666] hover:bg-[#F3F2EF] hover:text-[#191919] transition-colors text-xs font-semibold">
+        <button
+          onClick={handleShare}
+          className={`flex items-center justify-center gap-1.5 py-2.5 flex-1 rounded transition-colors text-xs font-semibold ${
+            shareState === "copied"
+              ? "text-[#0A66C2] hover:bg-[#EEF3FB]"
+              : "text-[#666] hover:bg-[#F3F2EF] hover:text-[#191919]"
+          }`}
+        >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <line x1="22" y1="2" x2="11" y2="13" />
             <polygon points="22 2 15 22 11 13 2 9 22 2" />
           </svg>
-          <span>Send</span>
+          <span>
+            {shareState === "copied" ? "✓ Link copied"
+              : shareState === "working" ? "Linking..."
+              : shareState === "error" ? "No link, sorry"
+              : "Send"}
+          </span>
         </button>
       </div>
     </div>
