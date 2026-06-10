@@ -1,10 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateAllPosts } from "@/lib/agents";
+import { checkRateLimit, clientIp } from "@/lib/ratelimit";
 
 export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
   try {
+    const ip = clientIp(req.headers);
+    const { success, retryAfterSec } = await checkRateLimit(ip);
+    if (!success) {
+      const mins = Math.ceil(retryAfterSec / 60);
+      return NextResponse.json(
+        {
+          error: `You've shipped 10 thought-leadership pieces this hour. Even the grindset needs a cooldown — circle back in ${mins} minute${mins === 1 ? "" : "s"}. 🚀`,
+        },
+        { status: 429, headers: { "Retry-After": String(retryAfterSec) } },
+      );
+    }
+
     const formData = await req.formData();
     const prompt = formData.get("prompt") as string;
 

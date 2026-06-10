@@ -220,7 +220,8 @@ export async function generateAllPosts(userPrompt: string): Promise<GeneratedPos
       return {
         post,
         pattern: agent.name,
-        score: typeof result.score === 'number' ? result.score : 7,
+        // generateText results carry no score; evaluation happens downstream
+        score: 7,
         key_metric: 7,
         key_metric_name: "score",
       } as GeneratedPost;
