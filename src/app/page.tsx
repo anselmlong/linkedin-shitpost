@@ -204,6 +204,14 @@ export default function Home() {
             <p className="text-center text-[#666] text-sm">
               Actually no, please don't post these on LinkedIn.
             </p>
+            <video
+              className="mx-auto mt-8 w-full max-w-xl rounded-lg border border-[#e0dfdc]"
+              src="/launch.mp4"
+              poster="/launch.jpg"
+              controls
+              playsInline
+              preload="none"
+            />
           </div>
         )}
       </main>
