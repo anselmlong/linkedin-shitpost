@@ -34,6 +34,14 @@
   }
 }
 
+/* The thumb gives a little nod when you like a post, like the real one does. */
+@keyframes likeNod {
+  0% { transform: rotate(0) scale(1); }
+  35% { transform: rotate(-18deg) scale(1.25); }
+  70% { transform: rotate(6deg) scale(0.95); }
+  100% { transform: rotate(0) scale(1); }
+}
+
 body {
   background: var(--background);
   color: var(--foreground);

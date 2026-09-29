@@ -35,6 +35,24 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [isLoading]);
 
+  // Generation takes a while, so people wander off to another tab. When the posts land
+  // while they're away, badge the tab title the way LinkedIn does with unread notifications.
+  useEffect(() => {
+    if (posts.length === 0 || !document.hidden) return;
+    const baseTitle = document.title.replace(/^\(\d+\)\s*/, "");
+    document.title = `(${posts.length}) ${baseTitle}`;
+    const clear = () => {
+      if (document.hidden) return;
+      document.title = baseTitle;
+      document.removeEventListener("visibilitychange", clear);
+    };
+    document.addEventListener("visibilitychange", clear);
+    return () => {
+      document.removeEventListener("visibilitychange", clear);
+      document.title = baseTitle;
+    };
+  }, [posts]);
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const donated = params.get('donated');
