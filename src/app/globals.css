@@ -8,8 +8,19 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+}
+
+/* LinkedIn palette */
+@theme {
+  --color-li-blue: #0A66C2;
+  --color-li-blue-dark: #004182;
+  --color-li-blue-soft: #EEF3FB;
+  --color-li-canvas: #F3F2EF;
+  --color-li-border: #E0DFDC;
+  --color-li-border-strong: #C0BFBD;
+  --color-li-text: #191919;
+  --color-li-muted: #666666;
 }
 
 @keyframes fadeIn {
@@ -23,8 +34,51 @@
   }
 }
 
+/* The thumb gives a little nod when you like a post, like the real one does. */
+@keyframes likeNod {
+  0% { transform: rotate(0) scale(1); }
+  35% { transform: rotate(-18deg) scale(1.25); }
+  70% { transform: rotate(6deg) scale(0.95); }
+  100% { transform: rotate(0) scale(1); }
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: #CFE2F7;
+  color: var(--foreground);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-li-blue);
+  outline-offset: 2px;
+}
+
+textarea {
+  caret-color: var(--color-li-blue);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0ms !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+/* Expands small LinkedIn-sized controls to a comfortable touch target without changing their look. */
+.hit-area {
+  position: relative;
+}
+.hit-area::after {
+  content: "";
+  position: absolute;
+  inset: -8px -4px;
 }

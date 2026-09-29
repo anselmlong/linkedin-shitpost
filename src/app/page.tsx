@@ -35,6 +35,24 @@ export default function Home() {
     return () => clearInterval(interval);
   }, [isLoading]);
 
+  // Generation takes a while, so people wander off to another tab. When the posts land
+  // while they're away, badge the tab title the way LinkedIn does with unread notifications.
+  useEffect(() => {
+    if (posts.length === 0 || !document.hidden) return;
+    const baseTitle = document.title.replace(/^\(\d+\)\s*/, "");
+    document.title = `(${posts.length}) ${baseTitle}`;
+    const clear = () => {
+      if (document.hidden) return;
+      document.title = baseTitle;
+      document.removeEventListener("visibilitychange", clear);
+    };
+    document.addEventListener("visibilitychange", clear);
+    return () => {
+      document.removeEventListener("visibilitychange", clear);
+      document.title = baseTitle;
+    };
+  }, [posts]);
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const donated = params.get('donated');
@@ -76,9 +94,6 @@ export default function Home() {
       const res = await fetch("/api/generate", { method: "POST", body: fd });
       const data = await res.json();
 
-      console.log("[page] Response status:", res.status);
-      console.log("[page] Response data:", data);
-
       if (!res.ok) throw new Error(data.error || "Generation failed");
 
       incrementUsage();
@@ -101,18 +116,22 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F3F2EF]">
+    <div className="min-h-screen bg-li-canvas">
       {/* LinkedIn-style nav */}
-      <header className="bg-white border-b border-[#E0DFDC] sticky top-0 z-10 shadow-[0_1px_3px_rgba(0,0,0,0.08)]">
-        <div className="max-w-3xl mx-auto px-4 h-12 flex items-center gap-1">
-          <span className="text-sm font-semibold text-[#191919]">sh</span>
-          <div className="w-7 h-7 bg-[#0A66C2] rounded flex items-center justify-center flex-shrink-0">
-            <span className="text-white font-extrabold text-base leading-none">it</span>
-          </div>
-          <span className="text-sm font-semibold text-[#191919]">post</span>
+      <header className="bg-white border-b border-li-border sticky top-0 z-10 shadow-[0_1px_3px_rgba(0,0,0,0.08)]">
+        <div className="max-w-3xl mx-auto px-4 h-12 flex items-center">
+          <h1 className="flex items-center gap-1">
+            <span className="sr-only">LinkedIn Shitpost Generator</span>
+            <span aria-hidden="true" className="text-sm font-semibold text-li-text">sh</span>
+            <span aria-hidden="true" className="w-7 h-7 bg-li-blue rounded flex items-center justify-center flex-shrink-0 text-white font-extrabold text-base leading-none">
+              it
+            </span>
+            <span aria-hidden="true" className="text-sm font-semibold text-li-text">post</span>
+          </h1>
           <button
+            type="button"
             onClick={() => setModalMode('voluntary')}
-            className="text-xs font-semibold text-[#0A66C2] border border-[#0A66C2] rounded-full px-3 py-1 hover:bg-[#EEF3FB] transition-colors flex-shrink-0 ml-auto"
+            className="hit-area text-xs font-semibold text-li-blue border border-li-blue rounded-full px-3 h-7 hover:bg-li-blue-soft active:bg-li-blue/15 transition-colors flex-shrink-0 ml-auto"
           >
             Support
           </button>
@@ -123,44 +142,48 @@ export default function Home() {
         <InputPanel onGenerate={handleGenerate} isLoading={isLoading} />
 
         {thankYou && (
-          <div className="bg-[#EEF3FB] border border-[#0A66C2]/30 rounded-lg p-3 text-sm text-[#0A66C2] text-center">
+          <div role="status" className="bg-li-blue-soft border border-li-blue/30 rounded-lg px-4 py-3 text-sm text-li-blue-dark text-center">
             you&apos;re a legend, genuinely thank you 🙏 you&apos;ve got unlimited generations for 30 days.
           </div>
         )}
 
         {error && (
-          <div className="bg-[#FEF2F2] border border-[#FECACA] rounded-lg p-4 text-sm text-[#991B1B]">
+          <div role="alert" className="bg-[#FEF2F2] border border-[#FECACA] rounded-lg px-4 py-3 text-sm text-[#991B1B]">
             <strong>Error:</strong> {error}
           </div>
         )}
 
+        <p role="status" className="sr-only">
+          {isLoading ? "Generating posts…" : posts.length > 0 ? `${posts.length} posts generated.` : ""}
+        </p>
+
         {isLoading && (
-          <div className="space-y-2">
-            <p className="text-center text-[#666] text-xs animate-pulse py-2">
+          <div className="space-y-2" aria-hidden="true">
+            <p className="text-center text-li-muted text-xs animate-pulse py-2">
               {loadingMessage}
             </p>
             {[0, 1, 2, 3].map((i) => (
-              <div key={i} className="bg-white border border-[#E0DFDC] rounded-lg overflow-hidden">
+              <div key={i} className="bg-white border border-li-border rounded-lg overflow-hidden">
                 <div className="px-4 pt-3 pb-2">
                   <div className="flex gap-2.5 items-start">
-                    <div className="w-12 h-12 rounded-full bg-[#E0DFDC] animate-pulse flex-shrink-0" />
+                    <div className="w-12 h-12 rounded-full bg-li-border animate-pulse flex-shrink-0" />
                     <div className="space-y-2 flex-1 pt-1">
-                      <div className="h-3.5 bg-[#E0DFDC] animate-pulse rounded w-24" />
-                      <div className="h-3 bg-[#E0DFDC] animate-pulse rounded w-40" />
-                      <div className="h-3 bg-[#E0DFDC] animate-pulse rounded w-12" />
+                      <div className="h-3.5 bg-li-border animate-pulse rounded w-24" />
+                      <div className="h-3 bg-li-border animate-pulse rounded w-40" />
+                      <div className="h-3 bg-li-border animate-pulse rounded w-12" />
                     </div>
                   </div>
                   <div className="mt-3 space-y-2">
-                    <div className="h-3.5 bg-[#E0DFDC] animate-pulse rounded" />
-                    <div className="h-3.5 bg-[#E0DFDC] animate-pulse rounded w-11/12" />
-                    <div className="h-3.5 bg-[#E0DFDC] animate-pulse rounded w-4/5" />
-                    <div className="h-3.5 bg-[#E0DFDC] animate-pulse rounded w-3/5" />
+                    <div className="h-3.5 bg-li-border animate-pulse rounded" />
+                    <div className="h-3.5 bg-li-border animate-pulse rounded w-11/12" />
+                    <div className="h-3.5 bg-li-border animate-pulse rounded w-4/5" />
+                    <div className="h-3.5 bg-li-border animate-pulse rounded w-3/5" />
                   </div>
                 </div>
-                <div className="border-t border-[#E0DFDC] mx-0 mt-2" />
+                <div className="border-t border-li-border mx-0 mt-2" />
                 <div className="flex gap-1 px-2 py-1.5">
                   {[0, 1, 2, 3].map((j) => (
-                    <div key={j} className="h-8 bg-[#F3F2EF] animate-pulse rounded flex-1" />
+                    <div key={j} className="h-8 bg-li-canvas animate-pulse rounded flex-1" />
                   ))}
                 </div>
               </div>
@@ -171,7 +194,7 @@ export default function Home() {
         {!isLoading && posts.length > 0 && (
           <div className="space-y-6">
             {usedPrompt && (
-              <p className="text-center text-[#666] text-xs italic">
+              <p className="text-center text-li-muted text-xs italic">
                 &ldquo;{usedPrompt}&rdquo;
               </p>
             )}
@@ -198,14 +221,17 @@ export default function Home() {
 
         {!isLoading && posts.length === 0 && (
           <div className="space-y-2 py-16">
-            <p className="text-center text-[#191919] text-2xl font-extrabold">
+            <h2 className="text-center text-li-text text-2xl font-extrabold text-balance">
               Your career depends on this.
-            </p>
-            <p className="text-center text-[#666] text-sm">
-              Actually no, please don't post these on LinkedIn.
+            </h2>
+            <p className="text-center text-li-muted text-sm">
+              Actually no, please don&apos;t post these on LinkedIn.
             </p>
             <video
-              className="mx-auto mt-8 w-full max-w-xl rounded-lg border border-[#e0dfdc]"
+              className="mx-auto mt-8 w-full max-w-xl aspect-video rounded-lg border border-li-border bg-white"
+              width={1280}
+              height={720}
+              aria-label="Launch video"
               src="/launch.mp4"
               poster="/launch.jpg"
               controls
