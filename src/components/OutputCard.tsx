@@ -100,6 +100,7 @@ function CheckIcon() {
 export default function OutputCard({ pattern, post }: OutputCardProps) {
   const [copyState, setCopyState] = useState<"idle" | "copied" | "error">("idle");
   const [liked, setLiked] = useState(false);
+  const [following, setFollowing] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [shareState, setShareState] = useState<"idle" | "working" | "copied" | "error">("idle");
 
@@ -186,8 +187,25 @@ export default function OutputCard({ pattern, post }: OutputCardProps) {
           </div>
 
           <div className="flex items-center gap-1 flex-shrink-0 mt-0.5">
-            <button type="button" className="hit-area text-xs font-semibold text-li-blue hover:bg-li-blue-soft border border-transparent sm:border-li-blue rounded-full px-2 sm:px-3 h-7 transition-colors leading-tight whitespace-nowrap">
-              + Follow
+            {/* You can actually follow them. You will regret it, like on the real thing. */}
+            <button
+              type="button"
+              onClick={() => setFollowing(!following)}
+              aria-pressed={following}
+              aria-label={`Follow ${agent.fakeName}`}
+              className={`hit-area text-xs font-semibold rounded-full px-2 sm:px-3 h-7 border transition-colors leading-tight whitespace-nowrap ${
+                following
+                  ? "text-li-muted border-transparent hover:bg-li-canvas hover:text-li-text"
+                  : "text-li-blue border-transparent sm:border-li-blue hover:bg-li-blue-soft"
+              }`}
+            >
+              {following ? (
+                <span key="following" className="inline-flex items-center animate-[settleIn_0.25s_cubic-bezier(0.16,1,0.3,1)]">
+                  <CheckIcon />Following
+                </span>
+              ) : (
+                "+ Follow"
+              )}
             </button>
             <button type="button" aria-label="More actions" className="hit-area text-li-muted hover:bg-li-canvas w-7 h-7 flex items-center justify-center rounded-full transition-colors">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">

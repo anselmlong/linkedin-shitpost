@@ -37,6 +37,11 @@
   }
 }
 
+@keyframes settleIn {
+  from { opacity: 0; transform: translateY(3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* The thumb gives a little nod when you like a post, like the real one does. */
 @keyframes likeNod {
   0% { transform: rotate(0) scale(1); }
