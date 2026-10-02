@@ -89,6 +89,14 @@ function formatCount(n: number): string {
 
 const TRUNCATE_LENGTH = 280;
 
+function CheckIcon() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="inline-block mr-1 align-[-1px]">
+      <path d="M5 12.5l4.5 4.5L19 7.5" />
+    </svg>
+  );
+}
+
 export default function OutputCard({ pattern, post }: OutputCardProps) {
   const [copyState, setCopyState] = useState<"idle" | "copied" | "error">("idle");
   const [liked, setLiked] = useState(false);
@@ -136,7 +144,9 @@ export default function OutputCard({ pattern, post }: OutputCardProps) {
   };
 
   const shouldTruncate = post.length > TRUNCATE_LENGTH;
-  const displayPost = shouldTruncate && !expanded ? post.slice(0, TRUNCATE_LENGTH) : post;
+  // Cut at the last word boundary so "more" never lands mid-word or mid-hashtag.
+  const truncated = post.slice(0, TRUNCATE_LENGTH).replace(/\s+\S*$/, "");
+  const displayPost = shouldTruncate && !expanded ? truncated : post;
   const likeCount = agent.likes + (liked ? 1 : 0);
 
   return (
@@ -210,7 +220,7 @@ export default function OutputCard({ pattern, post }: OutputCardProps) {
       </div>
 
       {/* Reaction counts row */}
-      <div className="px-4 py-2 flex items-center justify-between">
+      <div className="px-4 pt-3 pb-2 flex items-center justify-between">
         <div className="flex items-center gap-1">
           <span className="text-base leading-none" aria-hidden="true">👍</span>
           <span className="text-base leading-none -ml-1" aria-hidden="true">❤️</span>
@@ -229,7 +239,9 @@ export default function OutputCard({ pattern, post }: OutputCardProps) {
             aria-live="polite"
             className="hit-area text-xs font-semibold text-li-blue hover:underline underline-offset-2 transition-colors"
           >
-            {copyState === "copied" ? "✓ Copied" : copyState === "error" ? "Copy failed" : "Copy post"}
+            {copyState === "copied" ? <><CheckIcon />Copied</>
+              : copyState === "error" ? "Copy failed"
+              : "Copy post"}
           </button>
         </div>
       </div>
@@ -297,7 +309,7 @@ export default function OutputCard({ pattern, post }: OutputCardProps) {
             <polygon points="22 2 15 22 11 13 2 9 22 2" />
           </svg>
           <span>
-            {shareState === "copied" ? "✓ Link copied"
+            {shareState === "copied" ? <><CheckIcon />Link copied</>
               : shareState === "working" ? "Linking..."
               : shareState === "error" ? "No link, sorry"
               : "Send"}

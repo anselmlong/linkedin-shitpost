@@ -92,7 +92,7 @@ export default function InputPanel({ onGenerate, isLoading }: InputPanelProps) {
             <button
               type="button"
               onClick={() => setExpanded(true)}
-              className="flex-1 min-w-0 min-h-11 text-left border border-li-border-strong rounded-full px-4 py-2 text-sm font-semibold text-li-muted hover:bg-li-canvas transition-colors"
+              className="flex-1 min-w-0 min-h-11 text-left border border-li-border-strong rounded-full px-4 py-2 text-sm font-semibold text-li-muted truncate hover:bg-li-canvas transition-colors"
             >
               What do you want to thought-leader about?
             </button>
