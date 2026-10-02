@@ -89,9 +89,18 @@ function formatCount(n: number): string {
 
 const TRUNCATE_LENGTH = 280;
 
+function CheckIcon() {
+  return (
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="inline-block mr-1 align-[-1px]">
+      <path d="M5 12.5l4.5 4.5L19 7.5" />
+    </svg>
+  );
+}
+
 export default function OutputCard({ pattern, post }: OutputCardProps) {
   const [copyState, setCopyState] = useState<"idle" | "copied" | "error">("idle");
   const [liked, setLiked] = useState(false);
+  const [following, setFollowing] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [shareState, setShareState] = useState<"idle" | "working" | "copied" | "error">("idle");
 
@@ -136,7 +145,9 @@ export default function OutputCard({ pattern, post }: OutputCardProps) {
   };
 
   const shouldTruncate = post.length > TRUNCATE_LENGTH;
-  const displayPost = shouldTruncate && !expanded ? post.slice(0, TRUNCATE_LENGTH) : post;
+  // Cut at the last word boundary so "more" never lands mid-word or mid-hashtag.
+  const truncated = post.slice(0, TRUNCATE_LENGTH).replace(/\s+\S*$/, "");
+  const displayPost = shouldTruncate && !expanded ? truncated : post;
   const likeCount = agent.likes + (liked ? 1 : 0);
 
   return (
@@ -158,11 +169,9 @@ export default function OutputCard({ pattern, post }: OutputCardProps) {
               </div>
             </div>
             <div className="min-w-0">
-              <div className="flex items-center gap-1 flex-wrap">
-                <span className="text-sm font-semibold text-li-text leading-tight">
-                  {agent.fakeName}
-                </span>
-                <span className="text-xs text-li-muted font-normal" aria-label="1st degree connection">• 1st</span>
+              <div className="text-sm leading-tight">
+                <span className="font-semibold text-li-text">{agent.fakeName}</span>{" "}
+                <span className="text-xs text-li-muted whitespace-nowrap" aria-label="1st degree connection">• 1st</span>
               </div>
               <div className="text-xs text-li-muted leading-tight mt-0.5 line-clamp-2">
                 {agent.fakeTitle}
@@ -178,8 +187,25 @@ export default function OutputCard({ pattern, post }: OutputCardProps) {
           </div>
 
           <div className="flex items-center gap-1 flex-shrink-0 mt-0.5">
-            <button type="button" className="hit-area text-xs font-semibold text-li-blue hover:bg-li-blue-soft border border-li-blue rounded-full px-3 h-7 transition-colors leading-tight">
-              + Follow
+            {/* You can actually follow them. You will regret it, like on the real thing. */}
+            <button
+              type="button"
+              onClick={() => setFollowing(!following)}
+              aria-pressed={following}
+              aria-label={`Follow ${agent.fakeName}`}
+              className={`hit-area text-xs font-semibold rounded-full px-2 sm:px-3 h-7 border transition-colors leading-tight whitespace-nowrap ${
+                following
+                  ? "text-li-muted border-transparent hover:bg-li-canvas hover:text-li-text"
+                  : "text-li-blue border-transparent sm:border-li-blue hover:bg-li-blue-soft"
+              }`}
+            >
+              {following ? (
+                <span key="following" className="inline-flex items-center animate-[settleIn_0.25s_cubic-bezier(0.16,1,0.3,1)]">
+                  <CheckIcon />Following
+                </span>
+              ) : (
+                "+ Follow"
+              )}
             </button>
             <button type="button" aria-label="More actions" className="hit-area text-li-muted hover:bg-li-canvas w-7 h-7 flex items-center justify-center rounded-full transition-colors">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -212,7 +238,7 @@ export default function OutputCard({ pattern, post }: OutputCardProps) {
       </div>
 
       {/* Reaction counts row */}
-      <div className="px-4 py-2 flex items-center justify-between">
+      <div className="px-4 pt-3 pb-2 flex items-center justify-between">
         <div className="flex items-center gap-1">
           <span className="text-base leading-none" aria-hidden="true">👍</span>
           <span className="text-base leading-none -ml-1" aria-hidden="true">❤️</span>
@@ -231,7 +257,9 @@ export default function OutputCard({ pattern, post }: OutputCardProps) {
             aria-live="polite"
             className="hit-area text-xs font-semibold text-li-blue hover:underline underline-offset-2 transition-colors"
           >
-            {copyState === "copied" ? "✓ Copied" : copyState === "error" ? "Copy failed" : "Copy post"}
+            {copyState === "copied" ? <><CheckIcon />Copied</>
+              : copyState === "error" ? "Copy failed"
+              : "Copy post"}
           </button>
         </div>
       </div>
@@ -299,7 +327,7 @@ export default function OutputCard({ pattern, post }: OutputCardProps) {
             <polygon points="22 2 15 22 11 13 2 9 22 2" />
           </svg>
           <span>
-            {shareState === "copied" ? "✓ Link copied"
+            {shareState === "copied" ? <><CheckIcon />Link copied</>
               : shareState === "working" ? "Linking..."
               : shareState === "error" ? "No link, sorry"
               : "Send"}

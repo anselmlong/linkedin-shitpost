@@ -1,13 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
-const ecosystemFooterLinkStyle = {
-  color: "#666",
-  fontSize: "0.8rem",
-  textDecoration: "none",
-  letterSpacing: "0.02em",
-};
-
 export const metadata: Metadata = {
   title: "LinkedIn Shitpost Generator",
   description: "Generate satirical LinkedIn posts from any topic or image",
@@ -28,10 +21,10 @@ export default function RootLayout({
     <html lang="en" className="h-full antialiased">
       <body className="min-h-full flex flex-col">
         {children}
-        <footer style={{ textAlign: "center", padding: "2rem 1rem 1.5rem" }}>
+        <footer className="text-center px-4 pt-8 pb-6">
           <a
             href="https://anselmlong.com?from=shitpost"
-            style={ecosystemFooterLinkStyle}
+            className="text-[0.8rem] tracking-[0.02em] text-li-muted rounded-sm hover:text-li-text hover:underline underline-offset-2 transition-colors"
           >
             &larr; part of anselmlong.com
           </a>

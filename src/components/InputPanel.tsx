@@ -92,7 +92,7 @@ export default function InputPanel({ onGenerate, isLoading }: InputPanelProps) {
             <button
               type="button"
               onClick={() => setExpanded(true)}
-              className="flex-1 min-w-0 min-h-11 text-left border border-li-border-strong rounded-full px-4 py-2 text-sm font-semibold text-li-muted hover:bg-li-canvas transition-colors"
+              className="flex-1 min-w-0 min-h-11 text-left border border-li-border-strong rounded-full px-4 py-2 text-sm font-semibold text-li-muted truncate hover:bg-li-canvas transition-colors"
             >
               What do you want to thought-leader about?
             </button>
@@ -116,7 +116,7 @@ export default function InputPanel({ onGenerate, isLoading }: InputPanelProps) {
             <div className="flex items-center justify-end gap-2 sm:gap-3">
               <span
                 id="composer-count"
-                className={`text-xs tabular-nums mr-auto sm:mr-0 pl-[52px] sm:pl-0 ${prompt.length >= MAX_CHARS ? "text-[#B42318] font-semibold" : "text-li-muted"}`}
+                className={`text-xs tabular-nums mr-auto sm:mr-0 pl-[52px] sm:pl-0 ${prompt.length >= MAX_CHARS ? "text-li-danger font-semibold" : "text-li-muted"}`}
               >
                 {prompt.length.toLocaleString()}/{MAX_CHARS.toLocaleString()}
               </span>
