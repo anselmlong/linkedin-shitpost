@@ -136,7 +136,7 @@ export default function DonationModal({ mode, onClose, onBypass }: DonationModal
         </div>
 
         {error && (
-          <p role="alert" className="text-xs text-[#B42318] mb-3">{error}</p>
+          <p role="alert" className="text-xs text-li-danger mb-3">{error}</p>
         )}
 
         <button

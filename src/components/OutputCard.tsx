@@ -158,11 +158,9 @@ export default function OutputCard({ pattern, post }: OutputCardProps) {
               </div>
             </div>
             <div className="min-w-0">
-              <div className="flex items-center gap-1 flex-wrap">
-                <span className="text-sm font-semibold text-li-text leading-tight">
-                  {agent.fakeName}
-                </span>
-                <span className="text-xs text-li-muted font-normal" aria-label="1st degree connection">• 1st</span>
+              <div className="text-sm leading-tight">
+                <span className="font-semibold text-li-text">{agent.fakeName}</span>{" "}
+                <span className="text-xs text-li-muted whitespace-nowrap" aria-label="1st degree connection">• 1st</span>
               </div>
               <div className="text-xs text-li-muted leading-tight mt-0.5 line-clamp-2">
                 {agent.fakeTitle}
@@ -178,7 +176,7 @@ export default function OutputCard({ pattern, post }: OutputCardProps) {
           </div>
 
           <div className="flex items-center gap-1 flex-shrink-0 mt-0.5">
-            <button type="button" className="hit-area text-xs font-semibold text-li-blue hover:bg-li-blue-soft border border-li-blue rounded-full px-3 h-7 transition-colors leading-tight">
+            <button type="button" className="hit-area text-xs font-semibold text-li-blue hover:bg-li-blue-soft border border-transparent sm:border-li-blue rounded-full px-2 sm:px-3 h-7 transition-colors leading-tight whitespace-nowrap">
               + Follow
             </button>
             <button type="button" aria-label="More actions" className="hit-area text-li-muted hover:bg-li-canvas w-7 h-7 flex items-center justify-center rounded-full transition-colors">

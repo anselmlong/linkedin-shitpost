@@ -116,7 +116,7 @@ export default function InputPanel({ onGenerate, isLoading }: InputPanelProps) {
             <div className="flex items-center justify-end gap-2 sm:gap-3">
               <span
                 id="composer-count"
-                className={`text-xs tabular-nums mr-auto sm:mr-0 pl-[52px] sm:pl-0 ${prompt.length >= MAX_CHARS ? "text-[#B42318] font-semibold" : "text-li-muted"}`}
+                className={`text-xs tabular-nums mr-auto sm:mr-0 pl-[52px] sm:pl-0 ${prompt.length >= MAX_CHARS ? "text-li-danger font-semibold" : "text-li-muted"}`}
               >
                 {prompt.length.toLocaleString()}/{MAX_CHARS.toLocaleString()}
               </span>

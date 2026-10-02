@@ -21,6 +21,9 @@
   --color-li-border-strong: #C0BFBD;
   --color-li-text: #191919;
   --color-li-muted: #666666;
+  --color-li-danger: #B42318;
+  --color-li-danger-soft: #FEF3F2;
+  --color-li-danger-border: #FECDCA;
 }
 
 @keyframes fadeIn {
@@ -49,7 +52,7 @@ body {
 }
 
 ::selection {
-  background: #CFE2F7;
+  background: color-mix(in srgb, var(--color-li-blue) 20%, white);
   color: var(--foreground);
 }
 

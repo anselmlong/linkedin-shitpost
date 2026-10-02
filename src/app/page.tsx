@@ -148,7 +148,7 @@ export default function Home() {
         )}
 
         {error && (
-          <div role="alert" className="bg-[#FEF2F2] border border-[#FECACA] rounded-lg px-4 py-3 text-sm text-[#991B1B]">
+          <div role="alert" className="bg-li-danger-soft border border-li-danger-border rounded-lg px-4 py-3 text-sm text-li-danger">
             <strong>Error:</strong> {error}
           </div>
         )}
