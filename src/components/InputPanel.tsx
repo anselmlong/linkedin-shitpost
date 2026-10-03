@@ -131,7 +131,7 @@ export default function InputPanel({ onGenerate, isLoading }: InputPanelProps) {
               <button
                 type="submit"
                 disabled={isLoading || !prompt.trim()}
-                className="h-9 bg-li-blue hover:bg-li-blue-dark active:bg-[#09223b] disabled:bg-li-border disabled:text-li-muted disabled:cursor-not-allowed text-white text-sm font-semibold px-4 sm:px-5 rounded-full transition-colors duration-150"
+                className="h-9 bg-li-blue hover:bg-li-blue-dark active:bg-li-blue-press disabled:bg-li-border disabled:text-li-muted disabled:cursor-not-allowed text-white text-sm font-semibold px-4 sm:px-5 rounded-full transition-colors duration-150"
               >
                 {isLoading ? "Generating..." : "Shitpost"}
               </button>
