@@ -162,7 +162,6 @@ export default function OutputCard({ pattern, post }: OutputCardProps) {
   // Cut at the last word boundary so "more" never lands mid-word or mid-hashtag.
   const truncated = post.slice(0, TRUNCATE_LENGTH).replace(/\s+\S*$/, "");
   const displayPost = shouldTruncate && !expanded ? truncated : post;
-  const likeCount = agent.likes + (liked ? 1 : 0);
 
   return (
     <article
@@ -258,9 +257,16 @@ export default function OutputCard({ pattern, post }: OutputCardProps) {
             <ReactionBadge kind="like" />
             <ReactionBadge kind="love" className="-ml-1" />
           </span>
-          <span className="text-xs text-li-muted tabular-nums ml-0.5">
+          {/* Liking reads the way the feed says it: "You and 847 others". */}
+          <span className="text-xs text-li-muted tabular-nums ml-0.5 whitespace-nowrap">
             <span className="sr-only">Reactions: </span>
-            {formatCount(likeCount)}
+            {liked ? (
+              <span key="liked" className="inline-block animate-[settleIn_0.25s_cubic-bezier(0.16,1,0.3,1)]">
+                You and {formatCount(agent.likes)} others
+              </span>
+            ) : (
+              formatCount(agent.likes)
+            )}
           </span>
         </div>
         <div className="flex items-center gap-3">
