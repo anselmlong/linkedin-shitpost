@@ -30,7 +30,11 @@ export default function Home() {
   useEffect(() => {
     if (!isLoading) return;
     const interval = setInterval(() => {
-      setLoadingMessage(LOADING_MESSAGES[Math.floor(Math.random() * LOADING_MESSAGES.length)]);
+      // Pick a different line each tick so the message never appears to stall.
+      setLoadingMessage((current) => {
+        const others = LOADING_MESSAGES.filter((m) => m !== current);
+        return others[Math.floor(Math.random() * others.length)];
+      });
     }, 2000);
     return () => clearInterval(interval);
   }, [isLoading]);
