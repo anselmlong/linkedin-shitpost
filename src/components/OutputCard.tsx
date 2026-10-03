@@ -89,6 +89,20 @@ function formatCount(n: number): string {
 
 const TRUNCATE_LENGTH = 280;
 
+// Small round reaction badges, drawn to match the feed's own like / love icons.
+function ReactionBadge({ kind, className = "" }: { kind: "like" | "love"; className?: string }) {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" className={`rounded-full ring-2 ring-white ${className}`}>
+      <circle cx="8" cy="8" r="8" fill={kind === "like" ? "#378FE9" : "#DF704D"} />
+      {kind === "like" ? (
+        <path d="M8.9 7.1V5.3a1.1 1.1 0 0 0-1.1-1.1L6.1 7.6v4.3h4.2a.8.8 0 0 0 .8-.65l.5-3.25a.8.8 0 0 0-.8-.9zM5.4 11.9H4.5a.5.5 0 0 1-.5-.5V8.1a.5.5 0 0 1 .5-.5h.9z" fill="#fff" />
+      ) : (
+        <path d="M8 11.8 4.6 8.6a2 2 0 0 1 2.8-2.9l.6.6.6-.6a2 2 0 0 1 2.8 2.9z" fill="#fff" />
+      )}
+    </svg>
+  );
+}
+
 function CheckIcon() {
   return (
     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="inline-block mr-1 align-[-1px]">
@@ -170,7 +184,7 @@ export default function OutputCard({ pattern, post }: OutputCardProps) {
             </div>
             <div className="min-w-0">
               <div className="text-sm leading-tight">
-                <span className="font-semibold text-li-text">{agent.fakeName}</span>{" "}
+                <span className="font-semibold text-li-text">{agent.fakeName}</span>{"\u00A0"}
                 <span className="text-xs text-li-muted whitespace-nowrap" aria-label="1st degree connection">• 1st</span>
               </div>
               <div className="text-xs text-li-muted leading-tight mt-0.5 line-clamp-2">
@@ -240,8 +254,10 @@ export default function OutputCard({ pattern, post }: OutputCardProps) {
       {/* Reaction counts row */}
       <div className="px-4 pt-3 pb-2 flex items-center justify-between">
         <div className="flex items-center gap-1">
-          <span className="text-base leading-none" aria-hidden="true">👍</span>
-          <span className="text-base leading-none -ml-1" aria-hidden="true">❤️</span>
+          <span className="flex" aria-hidden="true">
+            <ReactionBadge kind="like" />
+            <ReactionBadge kind="love" className="-ml-1" />
+          </span>
           <span className="text-xs text-li-muted tabular-nums ml-0.5">
             <span className="sr-only">Reactions: </span>
             {formatCount(likeCount)}

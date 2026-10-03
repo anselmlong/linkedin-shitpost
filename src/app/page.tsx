@@ -119,7 +119,7 @@ export default function Home() {
     <div className="min-h-screen bg-li-canvas">
       {/* LinkedIn-style nav */}
       <header className="bg-white border-b border-li-border sticky top-0 z-10 shadow-[0_1px_3px_rgba(0,0,0,0.08)]">
-        <div className="max-w-3xl mx-auto px-4 h-12 flex items-center">
+        <div className="max-w-xl mx-auto px-4 h-12 flex items-center">
           <h1 className="flex items-center gap-1">
             <span className="sr-only">LinkedIn Shitpost Generator</span>
             <span aria-hidden="true" className="text-sm font-semibold text-li-text">sh</span>
@@ -138,7 +138,7 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="max-w-3xl mx-auto px-4 py-6 space-y-4">
+      <main className="max-w-xl mx-auto px-4 py-6 space-y-4">
         <InputPanel onGenerate={handleGenerate} isLoading={isLoading} />
 
         {thankYou && (

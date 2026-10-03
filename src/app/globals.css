@@ -15,6 +15,7 @@
 @theme {
   --color-li-blue: #0A66C2;
   --color-li-blue-dark: #004182;
+  --color-li-blue-press: #09223B;
   --color-li-blue-soft: #EEF3FB;
   --color-li-canvas: #F3F2EF;
   --color-li-border: #E0DFDC;
@@ -56,18 +57,21 @@ body {
   font-family: var(--font-sans);
 }
 
-::selection {
-  background: color-mix(in srgb, var(--color-li-blue) 20%, white);
-  color: var(--foreground);
-}
+/* Layered so component utilities (e.g. a field's own focus ring) can override the default outline. */
+@layer base {
+  ::selection {
+    background: color-mix(in srgb, var(--color-li-blue) 20%, white);
+    color: var(--foreground);
+  }
 
-:focus-visible {
-  outline: 2px solid var(--color-li-blue);
-  outline-offset: 2px;
-}
+  :focus-visible {
+    outline: 2px solid var(--color-li-blue);
+    outline-offset: 2px;
+  }
 
-textarea {
-  caret-color: var(--color-li-blue);
+  textarea {
+    caret-color: var(--color-li-blue);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
