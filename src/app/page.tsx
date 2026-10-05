@@ -89,7 +89,6 @@ export default function Home() {
 
     setIsLoading(true);
     setError(null);
-    setUsedPrompt(prompt);
 
     try {
       const fd = new FormData();
@@ -101,6 +100,8 @@ export default function Home() {
       if (!res.ok) throw new Error(data.error || "Generation failed");
 
       incrementUsage();
+      // Only relabel once new posts land, so a failed run keeps the previous posts under their own prompt.
+      setUsedPrompt(prompt);
       setPosts(data.posts);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
