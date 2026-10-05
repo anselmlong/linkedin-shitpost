@@ -199,7 +199,8 @@ export async function generateAllPosts(userPrompt: string): Promise<GeneratedPos
     { name: "anselm", system: SYSTEM_ANSELM },
   ] as const;
 
-  const results = await Promise.all(
+  // allSettled so one persona timing out or erroring doesn't throw away the others' posts.
+  const settled = await Promise.allSettled(
     agents.map(async (agent) => {
       const result = await generateText({
         model: getModel(MODELS.generate),
@@ -227,6 +228,18 @@ export async function generateAllPosts(userPrompt: string): Promise<GeneratedPos
       } as GeneratedPost;
     })
   );
+
+  const results: GeneratedPost[] = [];
+  for (const [i, outcome] of settled.entries()) {
+    if (outcome.status === "fulfilled") {
+      results.push(outcome.value);
+    } else {
+      console.error(`[agents] ${agents[i].name} failed:`, outcome.reason);
+    }
+  }
+  if (results.length === 0) {
+    throw (settled[0] as PromiseRejectedResult).reason;
+  }
 
   console.log("[agents] Returning", results.length, "posts");
   return results;
