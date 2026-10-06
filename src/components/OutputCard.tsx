@@ -251,7 +251,8 @@ export default function OutputCard({ pattern, post }: OutputCardProps) {
       </div>
 
       {/* Reaction counts row */}
-      <div className="px-4 pt-3 pb-2 flex items-center justify-between">
+      {/* Wraps as two whole groups on narrow phones instead of breaking "89 comments" mid-phrase. */}
+      <div className="px-4 pt-3 pb-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
         <div className="flex items-center gap-1">
           <span className="flex" aria-hidden="true">
             <ReactionBadge kind="like" />
@@ -269,7 +270,7 @@ export default function OutputCard({ pattern, post }: OutputCardProps) {
             )}
           </span>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 ml-auto whitespace-nowrap">
           <span className="text-xs text-li-muted tabular-nums">
             {agent.comments} comments
           </span>

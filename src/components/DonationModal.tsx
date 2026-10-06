@@ -127,7 +127,7 @@ export default function DonationModal({ mode, onClose, onBypass }: DonationModal
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               inputMode="numeric"
-              className="border border-li-border-strong rounded px-2 py-1.5 text-sm text-li-text w-20 focus:outline-none focus:border-li-blue focus:ring-2 focus:ring-li-blue/30"
+              className="border border-li-border-strong rounded px-2 py-1.5 text-base sm:text-sm text-li-text w-20 focus:outline-none focus:border-li-blue focus:ring-2 focus:ring-li-blue/30"
             />
             {amount === '1' && (
               <span className="text-xs text-li-muted">(I get 67¢ of that)</span>

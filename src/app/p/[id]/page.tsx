@@ -64,6 +64,7 @@ export default async function SharedPostPage({ params }: Props) {
   return (
     <main className="min-h-screen bg-li-canvas py-10 px-4">
       <div className="max-w-[555px] mx-auto space-y-6">
+        <h1 className="sr-only">A post from the LinkedIn Shitpost Generator</h1>
         <OutputCard
           pattern={shared.pattern}
           label={shared.pattern}

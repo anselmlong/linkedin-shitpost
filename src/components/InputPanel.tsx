@@ -110,7 +110,7 @@ export default function InputPanel({ onGenerate, isLoading }: InputPanelProps) {
                 onKeyDown={handleKeyDown}
                 placeholder="What do you want to thought-leader about?"
                 rows={4}
-                className="flex-1 min-w-0 border border-li-border-strong rounded-lg px-3 py-2 text-sm leading-relaxed text-li-text placeholder-li-muted hover:border-li-muted focus:border-li-blue focus:outline-none resize-none focus:ring-2 focus:ring-li-blue/30 transition-[border-color,box-shadow]"
+                className="flex-1 min-w-0 border border-li-border-strong rounded-lg px-3 py-2 text-base sm:text-sm leading-relaxed text-li-text placeholder-li-muted hover:border-li-muted focus:border-li-blue focus:outline-none resize-none focus:ring-2 focus:ring-li-blue/30 transition-[border-color,box-shadow]"
               />
             </div>
             <div className="flex items-center justify-end gap-2 sm:gap-3">
