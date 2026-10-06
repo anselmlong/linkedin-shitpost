@@ -197,10 +197,10 @@ export default function Home() {
         )}
 
         {!isLoading && posts.length > 0 && (
-          <div className="space-y-6">
+          <div className="space-y-3">
             {usedPrompt && (
-              <p className="text-center text-li-muted text-xs italic">
-                &ldquo;{usedPrompt}&rdquo;
+              <p className="flex items-center gap-3 text-li-muted text-xs italic before:h-px before:flex-1 before:bg-li-border-strong after:h-px after:flex-1 after:bg-li-border-strong">
+                <span className="max-w-[80%] text-center line-clamp-2 break-words">&ldquo;{usedPrompt}&rdquo;</span>
               </p>
             )}
 
