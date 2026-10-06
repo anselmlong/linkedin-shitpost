@@ -89,7 +89,7 @@ export default function DonationModal({ mode, onClose, onBypass }: DonationModal
 
   return (
     <div
-      className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4 animate-[fadeIn_0.2s_ease-out]"
+      className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4 animate-[fadeOnly_0.2s_ease-out]"
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
       <div
@@ -98,7 +98,7 @@ export default function DonationModal({ mode, onClose, onBypass }: DonationModal
         aria-modal="true"
         aria-labelledby="donation-title"
         aria-describedby="donation-body"
-        className="bg-white rounded-lg max-w-sm w-full p-6 shadow-[0_4px_16px_rgba(0,0,0,0.15)] relative"
+        className="bg-white rounded-lg max-w-sm w-full p-6 shadow-[0_4px_16px_rgba(0,0,0,0.15)] relative animate-[fadeIn_0.25s_cubic-bezier(0.16,1,0.3,1)]"
       >
         <button
           type="button"
@@ -127,7 +127,7 @@ export default function DonationModal({ mode, onClose, onBypass }: DonationModal
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               inputMode="numeric"
-              className="border border-li-border-strong rounded px-2 py-1.5 text-sm text-li-text w-20 focus:outline-none focus:border-li-blue focus:ring-2 focus:ring-li-blue/30"
+              className="border border-li-border-strong rounded px-2 py-1.5 text-base sm:text-sm text-li-text w-20 focus:outline-none focus:border-li-blue focus:ring-2 focus:ring-li-blue/30"
             />
             {amount === '1' && (
               <span className="text-xs text-li-muted">(I get 67¢ of that)</span>
