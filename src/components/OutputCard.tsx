@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
+import { DefaultAvatar } from "@/components/InputPanel";
 
 interface OutputCardProps {
   pattern: string;
@@ -89,6 +90,9 @@ function formatCount(n: number): string {
 
 const TRUNCATE_LENGTH = 280;
 
+// The feed's one-tap replies: engagement without the inconvenience of an opinion.
+const SUGGESTED_COMMENTS = ["Great insights!", "Agree 💯", "Thanks for sharing", "Congrats!"];
+
 // Small round reaction badges, drawn to match the feed's own like / love icons.
 function ReactionBadge({ kind, className = "" }: { kind: "like" | "love"; className?: string }) {
   return (
@@ -116,6 +120,9 @@ export default function OutputCard({ pattern, post }: OutputCardProps) {
   const [liked, setLiked] = useState(false);
   const [following, setFollowing] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const [commentsOpen, setCommentsOpen] = useState(false);
+  const [myComment, setMyComment] = useState<string | null>(null);
+  const commentsId = useId();
   const [shareState, setShareState] = useState<"idle" | "working" | "copied" | "error">("idle");
 
   const handleCopy = async () => {
@@ -272,7 +279,7 @@ export default function OutputCard({ pattern, post }: OutputCardProps) {
         </div>
         <div className="flex items-center gap-3 ml-auto whitespace-nowrap">
           <span className="text-xs text-li-muted tabular-nums">
-            {agent.comments} comments
+            {agent.comments + (myComment ? 1 : 0)} comments
           </span>
           <button
             type="button"
@@ -318,7 +325,13 @@ export default function OutputCard({ pattern, post }: OutputCardProps) {
           <span>Like</span>
         </button>
 
-        <button type="button" className="flex items-center justify-center gap-1.5 min-h-11 flex-1 rounded text-li-muted hover:bg-li-canvas hover:text-li-text transition-colors text-xs font-semibold">
+        <button
+          type="button"
+          onClick={() => setCommentsOpen(!commentsOpen)}
+          aria-expanded={commentsOpen}
+          aria-controls={commentsId}
+          className="flex items-center justify-center gap-1.5 min-h-11 flex-1 rounded text-li-muted hover:bg-li-canvas hover:text-li-text transition-colors text-xs font-semibold"
+        >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
             <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
           </svg>
@@ -357,6 +370,36 @@ export default function OutputCard({ pattern, post }: OutputCardProps) {
           </span>
         </button>
       </div>
+
+      {commentsOpen && (
+        <div id={commentsId} aria-live="polite" className="px-4 pb-3 pt-1">
+          {myComment ? (
+            <div className="flex items-start gap-2 animate-[settleIn_0.25s_cubic-bezier(0.16,1,0.3,1)]">
+              <DefaultAvatar className="w-8! h-8!" />
+              <div className="min-w-0 bg-li-canvas rounded-lg rounded-tl-none px-3 py-2">
+                <p className="text-xs leading-tight">
+                  <span className="font-semibold text-li-text">You</span>
+                  <span className="text-li-muted"> • now</span>
+                </p>
+                <p className="text-sm text-li-text mt-1 break-words">{myComment}</p>
+              </div>
+            </div>
+          ) : (
+            <div role="group" aria-label="Suggested comments" className="flex flex-wrap gap-2 animate-[settleIn_0.25s_cubic-bezier(0.16,1,0.3,1)]">
+              {SUGGESTED_COMMENTS.map((text) => (
+                <button
+                  key={text}
+                  type="button"
+                  onClick={() => setMyComment(text)}
+                  className="h-8 px-3 rounded-full border border-li-border-strong text-xs font-semibold text-li-muted hover:bg-li-canvas hover:text-li-text hover:shadow-[inset_0_0_0_1px_var(--color-li-border-strong)] transition-[background-color,box-shadow,color]"
+                >
+                  {text}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </article>
   );
 }

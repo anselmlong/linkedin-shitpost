@@ -43,7 +43,7 @@ const PROMPTS = [
 ] as const;
 
 // LinkedIn's default "no photo" avatar, because you haven't uploaded one either.
-function DefaultAvatar({ className = "" }: { className?: string }) {
+export function DefaultAvatar({ className = "" }: { className?: string }) {
   return (
     <svg
       className={`w-10 h-10 rounded-full flex-shrink-0 ${className}`}
