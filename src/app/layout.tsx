@@ -28,6 +28,17 @@ export default function RootLayout({
           >
             &larr; part of anselmlong.com
           </a>
+          <span className="mx-2 text-[0.8rem] text-li-muted opacity-50" aria-hidden="true">
+            &middot;
+          </span>
+          <a
+            href="https://ko-fi.com/anselmlong"
+            target="_blank"
+            rel="noopener"
+            className="text-[0.8rem] tracking-[0.02em] text-li-muted rounded-sm hover:text-li-text hover:underline underline-offset-2 transition-colors"
+          >
+            &#9749; support me on ko-fi
+          </a>
         </footer>
       </body>
     </html>
